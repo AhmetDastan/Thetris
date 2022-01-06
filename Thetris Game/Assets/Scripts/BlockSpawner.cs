@@ -10,9 +10,16 @@ using UnityEngine;
 
 public class BlockSpawner : MonoBehaviour
 {
+    public BlockManager blockManager;
+    [SerializeField] private GameObject[] blockPrefabs;
 
-    public void SpawnBlock(GameObject gameObject, Vector2 position)
+    private void Start()
     {
-        Instantiate(gameObject, position, Quaternion.identity);
+        Instantiate(blockPrefabs[0], new Vector2(5f, 19.5f), Quaternion.identity);
+    }
+    public GameObject SpawnBlock()
+    {
+        GameObject currentBlock = Instantiate(blockPrefabs[0], new Vector2(5f, 17f), Quaternion.identity);
+        return currentBlock;
     }
 }

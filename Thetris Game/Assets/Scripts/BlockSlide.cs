@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BlockSlide : MonoBehaviour
 {
-    public float speed = 1f;
-    private float waitingTime = 1;
+    public float blockSpeed = 1;
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(MoveDown()) ;
     }
 
     // Update is called once per frame
-    void Update()
+   /* void Update()
     {
         if (waitingTime > 0) 
         {
@@ -22,6 +22,21 @@ public class BlockSlide : MonoBehaviour
         {
             transform.Translate(Vector3.down);
             waitingTime = 1;
+        }
+    }*/
+
+    private IEnumerator MoveDown()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(blockSpeed);
+            Vector3 position = transform.position;
+            position.y--;
+            transform.position = position;
+            if(transform.position.y <= -9.5f)
+            {
+                yield break;
+            }
         }
     }
 }

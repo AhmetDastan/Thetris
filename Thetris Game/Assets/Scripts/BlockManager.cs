@@ -10,9 +10,10 @@ public class BlockManager : MonoBehaviour
         blocklarin hiz gibi degisen ozellikleri senin uzerinden yurutulsun
         
      */
+    public BlockSpawner blockSpawner;
     public bool needNewBlock = false;
-
-    [SerializeField] private GameObject[] blockPrefabs;
+    private GameObject currentBlock;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -25,8 +26,9 @@ public class BlockManager : MonoBehaviour
     {
         if (needNewBlock) 
         {
-            Instantiate(blockPrefabs[1], new Vector2(-0.5f,8.5f) , Quaternion.identity);
             needNewBlock = false;
+            currentBlock = blockSpawner.SpawnBlock();
+            Debug.Log(currentBlock);
         }
     }
 }
