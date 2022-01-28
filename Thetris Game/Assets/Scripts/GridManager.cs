@@ -68,4 +68,75 @@ public class GridManager : MonoBehaviour
         return null;
     }
 
+    public void FillTheGridByBlock(GameObject gameObject)
+    {
+        int roundedX, roundedY;
+
+        foreach (Transform child in gameObject.transform)
+        {
+            roundedX = Mathf.RoundToInt(child.transform.position.x);
+            roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            _tiles[new Vector2(roundedX, roundedY)]._isEmpty = false;
+            _tiles[new Vector2(roundedX, roundedY)].block = child.gameObject;
+        }
+    }
+
+    public void ClearLine()
+    {
+        int totalTranslation = 0, lastDestroyedLine = 0;
+        for (int i = 0; i < _height; i++)
+        {
+            for (int j = 0; j < _width; j++)
+            {
+                if (GetTileAtPosition(new Vector2(j, i)) == null || GetTileAtPosition(new Vector2(j, i))._isEmpty)
+                {
+                    break;
+                }
+                else
+                {
+                    if ((j+1) == _width)
+                    {
+                        for(int k = 0; k < 10; k++)
+                        {
+                            GetTileAtPosition(new Vector2(k, i)).name = "silinmeli";
+                            Destroy(GetTileAtPosition(new Vector2(k, i)).block);
+                            GetTileAtPosition(new Vector2(k, i))._isEmpty = true;
+                            GetTileAtPosition(new Vector2(k, i)).block = null;
+                        }
+                        totalTranslation++;
+                        lastDestroyedLine = i;
+
+                    }
+                    continue;
+                }
+            }
+        }
+        if(totalTranslation > 0) RemainBlockTranslational(lastDestroyedLine, totalTranslation);
+    }
+
+    void RemainBlockTranslational(int lineY, int howManyTranslation)
+    {   
+        for (int i = (lineY+1); i < _height; i++)
+        {
+            for (int j = 0; j < _width; j++)
+            {
+                for (int k = 0; k < howManyTranslation; k++)
+                {
+
+                    if (_tiles[new Vector2(j, (i - k))].block == null) 
+                        continue;
+
+                    _tiles[new Vector2(j, i-k)].block.gameObject.transform.position -= new Vector3(0, 1, 0);
+                    
+                    _tiles[new Vector2(j, (i - 1-k))].block = _tiles[new Vector2(j, i-k)].block;
+                    _tiles[new Vector2(j, i - k)].block = null;
+
+                    _tiles[new Vector2(j, i - k)]._isEmpty = true;
+                    _tiles[new Vector2(j, (i -1-k))]._isEmpty = false;
+
+                }
+            }
+        }
+    }
 }

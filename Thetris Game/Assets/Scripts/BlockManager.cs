@@ -14,12 +14,6 @@ public class BlockManager : MonoBehaviour
     public bool needNewBlock = false;
     private GameObject currentBlock;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Tilemap tilemap;
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -28,7 +22,6 @@ public class BlockManager : MonoBehaviour
         {
             needNewBlock = false;
             currentBlock = blockSpawner.SpawnBlock();
-            Debug.Log(currentBlock);
         }
     }
 }

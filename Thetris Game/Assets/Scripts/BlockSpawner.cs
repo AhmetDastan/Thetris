@@ -15,11 +15,11 @@ public class BlockSpawner : MonoBehaviour
 
     private void Start()
     {
-        Instantiate(blockPrefabs[0], new Vector2(5f, 19.5f), Quaternion.identity);
+        SpawnBlock();
     }
     public GameObject SpawnBlock()
     {
-        GameObject currentBlock = Instantiate(blockPrefabs[0], new Vector2(5f, 17f), Quaternion.identity);
+        GameObject currentBlock = Instantiate(blockPrefabs[Random.Range(0, blockPrefabs.Length)], new Vector2(5f, 17f), Quaternion.identity);
         return currentBlock;
     }
 }
