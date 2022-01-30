@@ -85,6 +85,7 @@ public class BlockControl : MonoBehaviour
         transform.position -= new Vector3(0, -1, 0);
 
         BlockStop();
+       
     }
 
     public bool ValidMove()

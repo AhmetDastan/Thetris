@@ -99,7 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a0d836c00009a4e9d259deae67705a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockSpeed: 1
+  defaultBlockSpeed: 0
+  fastBlockSpeed: 0
+  currentBlockSpeed: 0
   gridManager: {fileID: 4382393967639465556, guid: 13f5dbcf2396c524da74df0e3de89d3a,
     type: 3}
 --- !u!61 &2379473624486140562
