@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 5895585225471824053}
   m_Layer: 0
   m_Name: T block
-  m_TagString: Untagged
+  m_TagString: T Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,6 +104,9 @@ MonoBehaviour:
   currentBlockSpeed: 0
   gridManager: {fileID: 4382393967639465556, guid: 13f5dbcf2396c524da74df0e3de89d3a,
     type: 3}
+  blockSpawner: {fileID: 0}
+  LockDelayTime: 0
+  LockDelayCounter: 0
 --- !u!61 &2379473624486140562
 BoxCollider2D:
   m_ObjectHideFlags: 0

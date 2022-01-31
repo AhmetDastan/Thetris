@@ -13,13 +13,8 @@ public class BlockSpawner : MonoBehaviour
     public BlockManager blockManager;
     [SerializeField] private GameObject[] blockPrefabs;
 
-    private void Start()
-    {
-        SpawnBlock();
-    }
     public GameObject SpawnBlock()
     {
-        GameObject currentBlock = Instantiate(blockPrefabs[Random.Range(0, blockPrefabs.Length)], new Vector3(5f, 17f, 0), Quaternion.identity);
-        return currentBlock;
+        return Instantiate(blockPrefabs[Random.Range(0, blockPrefabs.Length)], new Vector3(5f, 17f, 0), Quaternion.identity); ;
     }
 }

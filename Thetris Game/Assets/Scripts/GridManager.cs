@@ -84,7 +84,7 @@ public class GridManager : MonoBehaviour
 
     public void ClearLine()
     {
-        int totalTranslation = 0, lastDestroyedLine = 0;
+        int lastDestroyedLine = 0;
         for (int i = 0; i < _height; i++)
         {
             for (int j = 0; j < _width; j++)
@@ -99,44 +99,69 @@ public class GridManager : MonoBehaviour
                     {
                         for(int k = 0; k < 10; k++)
                         {
-                            GetTileAtPosition(new Vector2(k, i)).name = "silinmeli";
                             Destroy(GetTileAtPosition(new Vector2(k, i)).block);
                             GetTileAtPosition(new Vector2(k, i))._isEmpty = true;
                             GetTileAtPosition(new Vector2(k, i)).block = null;
                         }
-                        totalTranslation++;
                         lastDestroyedLine = i;
-
+                        RemainBlockTranslational(lastDestroyedLine);
+                        i--;
                     }
                     continue;
                 }
             }
         }
-        if(totalTranslation > 0) RemainBlockTranslational(lastDestroyedLine, totalTranslation);
     }
 
-    void RemainBlockTranslational(int lineY, int howManyTranslation)
-    {   
+    void RemainBlockTranslational(int lineY)
+    {
         for (int i = (lineY+1); i < _height; i++)
         {
             for (int j = 0; j < _width; j++)
             {
-                for (int k = 0; k < howManyTranslation; k++)
-                {
-
-                    if (_tiles[new Vector2(j, (i - k))].block == null) 
+                    if (_tiles[new Vector2(j, (i))].block == null) 
                         continue;
 
-                    _tiles[new Vector2(j, i-k)].block.gameObject.transform.position -= new Vector3(0, 1, 0);
+                    _tiles[new Vector2(j, i)].block.gameObject.transform.position -= new Vector3(0, 1, 0);
                     
-                    _tiles[new Vector2(j, (i - 1-k))].block = _tiles[new Vector2(j, i-k)].block;
-                    _tiles[new Vector2(j, i - k)].block = null;
+                    _tiles[new Vector2(j, (i - 1))].block = _tiles[new Vector2(j, i)].block;
+                    _tiles[new Vector2(j, i)].block = null;
 
-                    _tiles[new Vector2(j, i - k)]._isEmpty = true;
-                    _tiles[new Vector2(j, (i -1-k))]._isEmpty = false;
+                    _tiles[new Vector2(j, i)]._isEmpty = true;
+                    _tiles[new Vector2(j, (i -1))]._isEmpty = false;
 
+            }
+        }
+    }
+
+    public void GosthPiece(GameObject gameObject)
+    {
+
+        int roundedX, roundedY;
+
+        foreach (Transform child in gameObject.transform)
+        {
+
+            roundedX = Mathf.RoundToInt(child.transform.position.x);
+            roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            // hucreyi bulduktan sonra  hucrenin alt satirlarini bakarak  block tagine gore gerekli ghostu bas 
+            for (int j = roundedY; j >= 0; j--)
+            {
+
+                if (_tiles[new Vector2(roundedX, j)] == null || GetTileAtPosition(new Vector2(roundedX, j))._isEmpty == false)
+                {
+                    Debug.Log("burda ne var x ve y " + roundedX + " " + (j + 1));
+                    _tiles[new Vector2(roundedX, (j+1))].ghostBlock = _tiles[new Vector2(0, 0)].block;
+                }
+                else
+                {
+                    Debug.Log("buraya girdi mi " + roundedX + " " + (j+1));
+
+                    continue;
                 }
             }
+            
         }
     }
 }

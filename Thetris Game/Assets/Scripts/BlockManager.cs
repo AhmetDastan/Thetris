@@ -5,15 +5,15 @@ using UnityEngine.Tilemaps;
 
 public class BlockManager : MonoBehaviour
 {
-    /*
-        yeni block ihtiyacin olursa blockspawnera bildir
-        blocklarin hiz gibi degisen ozellikleri senin uzerinden yurutulsun
-        
-     */
     public BlockSpawner blockSpawner;
     public bool needNewBlock = false;
-    private GameObject currentBlock;
+    public GameObject currentBlock;
     
+    void Start()
+    {
+        needNewBlock = false;
+        currentBlock = blockSpawner.SpawnBlock();
+    }
 
     // Update is called once per frame
     void Update()

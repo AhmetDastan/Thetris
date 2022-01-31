@@ -6,5 +6,6 @@ public class Tile : MonoBehaviour
 {
     public bool _isEmpty = true;
     public GameObject block;
-    
+
+    public GameObject ghostBlock;
 }

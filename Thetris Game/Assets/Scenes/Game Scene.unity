@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockSpawner: {fileID: 1787596205}
   needNewBlock: 0
+  currentBlock: {fileID: 0}
 --- !u!114 &1787596205
 MonoBehaviour:
   m_ObjectHideFlags: 0
