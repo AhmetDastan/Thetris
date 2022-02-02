@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class GameHandle : MonoBehaviour
 {
+    [SerializeField] BlockSpawner blockSpawner;
 
-    [SerializeField] BlockManager blockManager;
-
+    public int levelNum = 0;
+    internal int currentFrame = 48;
+    internal float currentScore = 0;
     internal bool oldBlockStopped = false;
+
+    internal GameObject currentBlock;
+
 
     // Start is called before the first frame update
     void Start()
     {
-            
+        currentBlock = blockSpawner.SpawnBlock();
+        levelNum = 0;
     }
 
     // Update is called once per frame
@@ -21,7 +27,8 @@ public class GameHandle : MonoBehaviour
         if (oldBlockStopped)
         {
             oldBlockStopped = false;
-            blockManager.needNewBlock = true;
+            currentBlock = blockSpawner.SpawnBlock();
+            currentFrame = LevelConstant.getFrameAmount(levelNum);
         }
     }
 }

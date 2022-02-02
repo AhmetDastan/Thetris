@@ -4,119 +4,183 @@ using UnityEngine;
 
 public class BlockControl : MonoBehaviour
 {
-    public float defaultBlockSpeed, fastBlockSpeed, currentBlockSpeed;
-
     [SerializeField] public GridManager gridManager;
 
-    [SerializeField] float LockDelayTime;
-    [SerializeField] float LockDelayCounter;
+    [SerializeField] float LockDelayFrameAmount;
+    [SerializeField] float LockDelayFrameCounter;
 
+    [SerializeField] float LockDelayMaxFrameAmount;
+    [SerializeField] float LockDelayMaxFrameCounter;
+
+    int currentFrame = 0;
+    int tempCurrentFrame = 0;
+
+    internal bool isHardDrop = false;
+    internal bool isSoftDrop = false;
+
+    private float frameCounter = 0;
+    GameObject tempGo;
     private void Start()
     {
-        LockDelayTime = 1f;
-        LockDelayCounter = 0;
+        LockDelayFrameAmount = 30f;
+        LockDelayFrameCounter = 0;
 
-        defaultBlockSpeed = 0.9f;
-        fastBlockSpeed = 0.1f;
-        currentBlockSpeed = defaultBlockSpeed;
-        StartCoroutine(FallDown());
+        LockDelayMaxFrameAmount = 120;
+        LockDelayMaxFrameCounter = 0;
+
+        currentFrame = FindObjectOfType<GameHandle>().currentFrame;
+        tempCurrentFrame = currentFrame;
     }
 
     void Update()
     {
+        
         BlockMovement();
-        /*if(LockDelayCounter >= LockDelayTime)
+
+        if (isHardDrop)
         {
+            currentFrame = currentFrame / 20;
+        }
+        else if (isSoftDrop)
+        {
+            currentFrame = (tempCurrentFrame / 3  );
+        }
+        else currentFrame = tempCurrentFrame;
+
+        frameCounter += 1;
+
+        if (frameCounter >= currentFrame)
+        {
+
+            frameCounter = 0;
+            FallDown();
+        }
+
+        if (LockDelayFrameCounter >= LockDelayFrameAmount)
+        {
+            LockDelayFrameCounter = 0;
             BlockStop();
-        }else
+        }
+        else
         {
-            LockDelayCounter += Time.deltaTime;
-        }*/
+            LockDelayFrameCounter += 1;
+        }
+
+        if (isGrounded())
+        {
+            if (LockDelayMaxFrameCounter >= LockDelayMaxFrameAmount)
+            {
+                LockDelayMaxFrameCounter = 0;
+                BlockStop();
+            }
+            else
+            {
+                LockDelayMaxFrameCounter += 1;
+            }
+        }
+        
+        Debug.Log("LockDelayMaxFrameCounter " + LockDelayMaxFrameCounter);
     }
 
     void BlockMovement()
     {
-        gridManager.GosthPiece(gameObject);
+        
         if (InputManager.isPressedLeft)
         {
             transform.position += new Vector3(-1, 0, 0);
-            if (!ValidMove())
+            if (!ValidMove(gameObject))
                 transform.position -= new Vector3(-1, 0, 0);
+            LockDelayFrameCounter = 0;
         }
         if (InputManager.isPressedRight)
         {
             transform.position += new Vector3(1, 0, 0);
-            if (!ValidMove())
+            if (!ValidMove(gameObject))
                 transform.position -= new Vector3(1, 0, 0);
+            LockDelayFrameCounter = 0;
         }
-        if (InputManager.isPressedM && (FindObjectOfType<BlockManager>().currentBlock.tag != "O Block"))
+        if (InputManager.isPressedM && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
         {
             transform.RotateAround(transform.position, Vector3.forward, 90);
-           
-            if (!ValidMove())
+
+            if (!ValidMove(gameObject))
             {
                 if (!WallKick())
                 {
                     transform.RotateAround(transform.position, Vector3.back, 90);
                 }
             }
+            LockDelayFrameCounter = 0;
         }
 
-        if (InputManager.isPressedN && (FindObjectOfType<BlockManager>().currentBlock.tag != "O Block"))
+        if (InputManager.isPressedN && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
         {
             transform.RotateAround(transform.position, Vector3.back, 90);
 
-            if (!ValidMove())
+            if (!ValidMove(gameObject))
             {
                 if (!WallKick())
                 {
                     transform.RotateAround(transform.position, Vector3.forward, 90);
                 }
             }
+            LockDelayFrameCounter = 0;
         }
-        if (InputManager.isPressedSpace)
+        if (InputManager.isPressedSpace) isHardDrop = true;
+
+        isSoftDrop = InputManager.isPressedDown ? isSoftDrop = true : isSoftDrop = false;
+
+
+        GosthPiece(gameObject);
+    }
+
+    private void FallDown()
+    {
+        transform.position -= new Vector3(0, 1, 0);
+        if (!ValidMove(gameObject))
         {
-            HardDrop();
+            transform.position += new Vector3(0, 1, 0);
         }
-        currentBlockSpeed = (InputManager.isPressedDown) ? fastBlockSpeed  : defaultBlockSpeed;
     }
 
     private bool WallKick()
     {
-        if (FindObjectOfType<BlockManager>().currentBlock.tag == "I Block")
+        if (FindObjectOfType<GameHandle>().currentBlock.tag == "I Block")
         {
             transform.position += new Vector3(-2, 0, 0);
-            if (!ValidMove())
+            if (!ValidMove(gameObject))
             {
                 transform.position += new Vector3(4, 0, 0);
-                if (!ValidMove())
+                if (!ValidMove(gameObject))
                 {
                     transform.position += new Vector3(-2, 2, 0);
-                    if (!ValidMove())
+                    if (!ValidMove(gameObject))
                     {
                         transform.position += new Vector3(0, -2, 0);
                         return false;
                     }
                 }
             }
+            LockDelayFrameCounter = 0;
             return true;
         }
-        else if (FindObjectOfType<BlockManager>().currentBlock.tag != "I Block")
+        else if (FindObjectOfType<GameHandle>().currentBlock.tag != "I Block")
         {
             transform.position += new Vector3(-1, 0, 0);
-            if (!ValidMove())
+            if (!ValidMove(gameObject))
             {
                 transform.position += new Vector3(2, 0, 0);
-                if (!ValidMove())
+                if (!ValidMove(gameObject))
                 {
                     transform.position += new Vector3(-1, 1, 0);
-                    if (!ValidMove())
+                    if (!ValidMove(gameObject))
                     {
                         transform.position += new Vector3(0, -1, 0);
                         return false;
                     }
                 }
             }
+            LockDelayFrameCounter = 0;
             return true;
         }
         return true;
@@ -126,11 +190,10 @@ public class BlockControl : MonoBehaviour
     {
         if (isGrounded())
         {
-            LockDelayCounter = 0f;
 
             this.enabled = false;
             gridManager.FillTheGridByBlock(gameObject);
-            FindObjectOfType<BlockManager>().needNewBlock = true;
+            FindObjectOfType<GameHandle>().oldBlockStopped = true;
             gridManager.ClearLine();
         }
     }
@@ -156,37 +219,11 @@ public class BlockControl : MonoBehaviour
         return false;
     }
 
-    private IEnumerator FallDown()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(currentBlockSpeed);
-            LockDelayCounter = 0f;
-            transform.position -= new Vector3(0, 1, 0);
-            if (!ValidMove())
-            {
-                transform.position += new Vector3(0, 1, 0);            
-                yield break;
-            }
-        }
-    }
-
-    private void HardDrop()
-    {
-        do{
-            transform.position += new Vector3(0, -1, 0);
-        } while (ValidMove());
-
-        transform.position -= new Vector3(0, -1, 0);
-
-        BlockStop();
-    }
-
-    public bool ValidMove()
+    public bool ValidMove(GameObject go)
     {
         int roundedX, roundedY;
         Tile tile;
-        foreach(Transform child in transform)
+        foreach(Transform child in go.transform)
         {
             roundedX = Mathf.RoundToInt(child.transform.position.x);
             roundedY = Mathf.RoundToInt(child.transform.position.y);
@@ -199,5 +236,34 @@ public class BlockControl : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void GosthPiece(GameObject gameObject)
+    {
+        int roundedX, roundedY;
+        Tile tile;
+        tempGo = Instantiate(gameObject);  // i know that is not master piece
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                GridManager._tiles[new Vector2(i, (j))].ghostBlock.SetActive(false);
+            }
+        }
+        do
+        {
+            tempGo.transform.position += new Vector3(0, -1, 0);
+        } while (ValidMove(tempGo));
+
+        tempGo.transform.position -= new Vector3(0, -1, 0);
+
+        foreach (Transform child in tempGo.transform)
+        {
+            roundedX = Mathf.RoundToInt(child.transform.position.x);
+            roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            GridManager._tiles[new Vector2(roundedX, roundedY)].ghostBlock.SetActive(true);
+        }
+        Destroy(tempGo);
     }
 }

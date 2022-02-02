@@ -10,6 +10,8 @@ public class GridManager : MonoBehaviour
 
     [SerializeField] private Tile _tilePrefab;
 
+    [SerializeField] private GameObject ghostPiecePrefab;
+
     [SerializeField] private Transform mainCamTransform;
     public static Dictionary<Vector2, Tile> _tiles;
 
@@ -55,6 +57,14 @@ public class GridManager : MonoBehaviour
                 spawnTile.name = i.ToString() + " " + j.ToString();
 
                 _tiles[new Vector2(i, j)] = spawnTile;
+
+                GameObject temp = Instantiate(ghostPiecePrefab, new Vector3(i, j), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+
+                _tiles[new Vector2(i, j)].ghostBlock = temp;
+
+
+                _tiles[new Vector2(i, j)].ghostBlock.SetActive(false) ;
             }
         }
     }
@@ -134,34 +144,62 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void GosthPiece(GameObject gameObject)
+  /*  public void GosthPiece(GameObject gameObject)
     {
-
         int roundedX, roundedY;
+        Tile tile;
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _height; j++)
+            {
+                _tiles[new Vector2(i, (j))].ghostBlock.SetActive(false);
+            }
+        }
 
+        //butun childlarin oturabilecegi en alt satiri bul ve o childlarin oldugu yeri beyaz bula
         foreach (Transform child in gameObject.transform)
         {
-
             roundedX = Mathf.RoundToInt(child.transform.position.x);
             roundedY = Mathf.RoundToInt(child.transform.position.y);
 
-            // hucreyi bulduktan sonra  hucrenin alt satirlarini bakarak  block tagine gore gerekli ghostu bas 
+            tile = GridManager.GetTileAtPosition(new Vector2(roundedX, roundedY));
+
+            if (tile == null || !tile._isEmpty)
+            {
+                //iste burasi
+            }
+            else
+            {
+
+            }
+        }
+    }*/
+}
+
+
+/*
+ * foreach (Transform child in gameObject.transform)
+        {
+            roundedX = Mathf.RoundToInt(child.transform.position.x);
+            roundedY = Mathf.RoundToInt(child.transform.position.y);
+
             for (int j = roundedY; j >= 0; j--)
             {
 
-                if (_tiles[new Vector2(roundedX, j)] == null || GetTileAtPosition(new Vector2(roundedX, j))._isEmpty == false)
+                if (j == 0 && GetTileAtPosition(new Vector2(roundedX, j))._isEmpty == true)
+                {
+                    _tiles[new Vector2(roundedX, (j))].ghostBlock.SetActive(true);
+                    break;
+                }
+                else if (GetTileAtPosition(new Vector2(roundedX, j))._isEmpty == false)
                 {
                     Debug.Log("burda ne var x ve y " + roundedX + " " + (j + 1));
-                    _tiles[new Vector2(roundedX, (j+1))].ghostBlock = _tiles[new Vector2(0, 0)].block;
+                    _tiles[new Vector2(roundedX, (j+1))].ghostBlock.SetActive(true);
+                    break;
                 }
                 else
                 {
-                    Debug.Log("buraya girdi mi " + roundedX + " " + (j+1));
-
                     continue;
                 }
             }
-            
-        }
-    }
-}
+        }*/

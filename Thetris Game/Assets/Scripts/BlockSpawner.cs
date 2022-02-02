@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class BlockSpawner : MonoBehaviour
 {
-    public BlockManager blockManager;
+    public GameHandle gameHandle;
     [SerializeField] private GameObject[] blockPrefabs;
 
     public GameObject SpawnBlock()

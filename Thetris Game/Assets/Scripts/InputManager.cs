@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    public static bool isPressedSpace = false;
     public static bool isPressedLeft = false;
     public static bool isPressedRight = false;
     public static bool isPressedDown = false;
     public static bool isPressedM = false;
     public static bool isPressedN = false;
-    public static bool isPressedSpace = false;
 
 
     // Update is called once per frame
