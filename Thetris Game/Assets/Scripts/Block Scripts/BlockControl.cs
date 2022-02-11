@@ -78,13 +78,10 @@ public class BlockControl : MonoBehaviour
                 LockDelayMaxFrameCounter += 1;
             }
         }
-        
-        Debug.Log("LockDelayMaxFrameCounter " + LockDelayMaxFrameCounter);
     }
 
     void BlockMovement()
     {
-        
         if (InputManager.isPressedLeft)
         {
             transform.position += new Vector3(-1, 0, 0);
@@ -190,10 +187,10 @@ public class BlockControl : MonoBehaviour
     {
         if (isGrounded())
         {
-
             this.enabled = false;
             gridManager.FillTheGridByBlock(gameObject);
-            FindObjectOfType<GameHandle>().oldBlockStopped = true;
+            FindObjectOfType<GameHandle>().isBlockLocked = true;
+            FindObjectOfType<GameHandle>().holdBlock.replaceable = true;
             gridManager.ClearLine();
         }
     }
@@ -230,7 +227,7 @@ public class BlockControl : MonoBehaviour
 
             tile = GridManager.GetTileAtPosition(new Vector2(roundedX, roundedY));
 
-            if (tile == null || !tile._isEmpty) 
+            if ((tile == null || !tile._isEmpty) ) 
             {
                 return false;
             }
@@ -241,7 +238,6 @@ public class BlockControl : MonoBehaviour
     public void GosthPiece(GameObject gameObject)
     {
         int roundedX, roundedY;
-        Tile tile;
         tempGo = Instantiate(gameObject);  // i know that is not master piece
         for (int i = 0; i < 10; i++)
         {
