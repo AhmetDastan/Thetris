@@ -18,7 +18,7 @@ public class GameHandle : MonoBehaviour
     internal GameObject currentBlock;
     [SerializeField] internal GameObject gameOverPanel;
 
-
+    public SaveObject saveObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +53,20 @@ public class GameHandle : MonoBehaviour
             }
             isNeedNewBlock = false;
             isBlockLocked = false;
+            
         }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            saveObject = SaveManager.Load();
+
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("Save girecem");
+            SaveManager.Save(saveObject);
+        }
+        Debug.Log("saveobject datas " + saveObject.currentLevel + " ve " + saveObject.currentScore);
 
     }
 
