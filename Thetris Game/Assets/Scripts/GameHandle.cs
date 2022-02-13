@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameHandle : MonoBehaviour
 {
+    private static GameHandle _instance = null;
+
+
     [SerializeField] internal BlockSpawner blockSpawner;
     [SerializeField] internal HoldBlock holdBlock;
 
@@ -19,17 +22,29 @@ public class GameHandle : MonoBehaviour
     [SerializeField] internal GameObject gameOverPanel;
 
     public SaveObject saveObject;
-    // Start is called before the first frame update
+    public AudioManager audioManager;
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         isBlockLocked = false;
         isNeedNewBlock = false;
         isStartNewGame = true;
         levelNum = 0;
-
+        audioManager.Play("Main Music");
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isStartNewGame)
@@ -66,8 +81,6 @@ public class GameHandle : MonoBehaviour
             Debug.Log("Save girecem");
             SaveManager.Save(saveObject);
         }
-        Debug.Log("saveobject datas " + saveObject.currentLevel + " ve " + saveObject.currentScore);
-
     }
 
     bool IsGameOver()

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class HoldBlock : MonoBehaviour
 {
-    [SerializeField] internal GameObject blockInHold;
-    [SerializeField] internal GameObject tempGo;
+    internal GameObject blockInHold;
+    internal GameObject tempGo;
 
     private Button holdButton;
 
@@ -54,10 +54,5 @@ public class HoldBlock : MonoBehaviour
         gameHandle.currentBlock = tempGo;
         gameHandle.currentBlock.SetActive(true);
         gameHandle.currentBlock.transform.position = new Vector2(5, 18);
-    }
-
-    private void Update()
-    {
-        Debug.Log("holdda bil bakalim ne var " + blockInHold);
     }
 }
