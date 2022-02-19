@@ -5,6 +5,7 @@ using UnityEngine;
 public class BlockControl : MonoBehaviour
 {
     [SerializeField] public GridManager gridManager;
+    public AudioManager audioManager;
 
     [SerializeField] float LockDelayFrameAmount;
     [SerializeField] float LockDelayFrameCounter;
@@ -30,11 +31,12 @@ public class BlockControl : MonoBehaviour
 
         currentFrame = FindObjectOfType<GameHandle>().currentFrame;
         tempCurrentFrame = currentFrame;
+
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     void Update()
     {
-        
         BlockMovement();
 
         if (isHardDrop)
@@ -187,10 +189,12 @@ public class BlockControl : MonoBehaviour
     {
         if (isGrounded())
         {
+            audioManager.Play("BlockFitting");
+
             this.enabled = false;
             gridManager.FillTheGridByBlock(gameObject);
             FindObjectOfType<GameHandle>().isBlockLocked = true;
-            FindObjectOfType<GameHandle>().holdBlock.replaceable = true;
+            FindObjectOfType<GameHandle>().gameUiManager.holdBlock.replaceable = true;
             gridManager.ClearLine();
         }
     }

@@ -47,13 +47,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a0d836c00009a4e9d259deae67705a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultBlockSpeed: 0
-  fastBlockSpeed: 0
-  currentBlockSpeed: 0
   gridManager: {fileID: 4382393967639465556, guid: 13f5dbcf2396c524da74df0e3de89d3a,
     type: 3}
-  LockDelayTime: 0
-  LockDelayCounter: 0
+  audioManager: {fileID: 230834289961920589, guid: 90b5fe25296327f4fb710591c8d40282,
+    type: 3}
+  LockDelayFrameAmount: 0
+  LockDelayFrameCounter: 0
+  LockDelayMaxFrameAmount: 0
+  LockDelayMaxFrameCounter: 0
 --- !u!1001 &1549160482285184898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 2099080025337227887, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.9382992
+      value: 0.89337146
       objectReference: {fileID: 0}
     - target: {fileID: 4648641240009832530, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
@@ -164,7 +165,7 @@ PrefabInstance:
     - target: {fileID: 2099080025337227887, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.9382992
+      value: 0.89337146
       objectReference: {fileID: 0}
     - target: {fileID: 4648641240009832530, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
@@ -254,7 +255,7 @@ PrefabInstance:
     - target: {fileID: 2099080025337227887, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.9382992
+      value: 0.89337146
       objectReference: {fileID: 0}
     - target: {fileID: 4648641240009832530, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
@@ -344,7 +345,7 @@ PrefabInstance:
     - target: {fileID: 2099080025337227887, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.9382992
+      value: 0.89337146
       objectReference: {fileID: 0}
     - target: {fileID: 4648641240009832530, guid: 2e5db4927a65aec4682793812d53ba07,
         type: 3}

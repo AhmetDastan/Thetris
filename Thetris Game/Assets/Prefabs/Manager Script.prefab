@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &230834289961920587
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 230834289961920590}
+  - component: {fileID: 230834289961920585}
+  - component: {fileID: 230834289961920584}
+  - component: {fileID: 230834289961920591}
+  - component: {fileID: 230834289961920589}
+  - component: {fileID: 230834289961920588}
+  m_Layer: 0
+  m_Name: Manager Script
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &230834289961920590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230834289961920587}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &230834289961920585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230834289961920587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01c5612eaab6bb646869257e2fce6353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &230834289961920584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230834289961920587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c2d757b1691f66458cfce1e359583bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &230834289961920591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230834289961920587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081a95745c8045345bea3c101507f8bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxRate: 9999
+  TargetFrameRate: 60
+--- !u!114 &230834289961920589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230834289961920587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e67e84d1ab5ea2c41905ac94bb6bf5bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Game Over
+    clip: {fileID: 8300000, guid: b80f8750ee7def74b8a64ec840e77bcf, type: 3}
+    volume: 1
+    pitch: 1.5
+    source: {fileID: 0}
+  - name: Main Music
+    clip: {fileID: 8300000, guid: 4632c89c810a5f048b96380114315855, type: 3}
+    volume: 1
+    pitch: 1.5
+    source: {fileID: 0}
+  - name: Explosion
+    clip: {fileID: 8300000, guid: c0672745b4ceb6840af626d2682e347b, type: 3}
+    volume: 1
+    pitch: 1.5
+    source: {fileID: 0}
+  - name: Block Fitting
+    clip: {fileID: 8300000, guid: 7751f41efaeea7d4699cfe746af894c7, type: 3}
+    volume: 1
+    pitch: 1.5
+    source: {fileID: 0}
+--- !u!114 &230834289961920588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230834289961920587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f2c0afd6923a2a458cb6b8b07593bb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

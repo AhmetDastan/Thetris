@@ -65,12 +65,12 @@ PrefabInstance:
     - target: {fileID: 4021199124758108451, guid: 6f26d830173583541a0768e5bff3cf7b,
         type: 3}
       propertyPath: m_Name
-      value: Red Variant
+      value: Red Block
       objectReference: {fileID: 0}
     - target: {fileID: 7668521793736543006, guid: 6f26d830173583541a0768e5bff3cf7b,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.009994984
+      value: 0.011765003
       objectReference: {fileID: 0}
     - target: {fileID: 7668521793736543006, guid: 6f26d830173583541a0768e5bff3cf7b,
         type: 3}

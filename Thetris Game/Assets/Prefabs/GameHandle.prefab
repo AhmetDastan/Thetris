@@ -48,7 +48,8 @@ MonoBehaviour:
   blockSpawner: {fileID: 4469786299054283680}
   holdBlock: {fileID: 4469786299054283683}
   levelNum: 0
-  gameOverPanel: {fileID: 1759164131804782444, guid: ff81bde99369bba459fd196899ea9704,
+  currentBlock: {fileID: 0}
+  gameOverPanel: {fileID: 1822775902502784201, guid: ff81bde99369bba459fd196899ea9704,
     type: 3}
   saveObject:
     highScores:

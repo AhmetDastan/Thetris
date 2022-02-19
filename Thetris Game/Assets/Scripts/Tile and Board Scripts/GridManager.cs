@@ -15,7 +15,6 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform mainCamTransform;
     public static Dictionary<Vector2, Tile> _tiles;
 
-
     public bool findAvailableCell = false;
 
     void Awake()
@@ -107,6 +106,8 @@ public class GridManager : MonoBehaviour
                 {
                     if ((j+1) == _width)
                     {
+                        AudioManager audioManager = FindObjectOfType<AudioManager>();
+                        audioManager.Play("Explosion");
                         for(int k = 0; k < 10; k++)
                         {
                             Destroy(GetTileAtPosition(new Vector2(k, i)).block);
