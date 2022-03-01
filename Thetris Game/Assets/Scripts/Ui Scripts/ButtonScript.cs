@@ -17,14 +17,21 @@ public class ButtonScript : MonoBehaviour
         if(gameObject.name == "Menu")
         {
             SceneManageSystem.LoadNewScene("Menu Scene");
+            FindObjectOfType<AudioManager>().Play("MainMusic");
+            FindObjectOfType<AudioManager>().AdjustVolume("MainMusic", 0.5f);
+            FindObjectOfType<AudioManager>().AdjustVolume("GameOver", 0);
         }
         else if (gameObject.name == "Restart")
         {
             SceneManageSystem.LoadNewScene("Game Scene");
+            FindObjectOfType<AudioManager>().Play("MainMusic");
+            FindObjectOfType<AudioManager>().AdjustVolume("MainMusic", 0.5f);
+            FindObjectOfType<AudioManager>().AdjustVolume("GameOver", 0);
         }
-        else
+        else if(gameObject.name == "Play")
         {
-            SceneManageSystem.LoadNewScene("Game Scene");
+            FindObjectOfType<AdManager>().RequestInterstitial();
+            
         }
     }
 }

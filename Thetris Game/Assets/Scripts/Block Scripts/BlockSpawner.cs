@@ -13,7 +13,7 @@ public class BlockSpawner : MonoBehaviour
 
     public GameObject SpawnBlock()
     {
-        if (comingBlockQueue.Count < 3)
+        if (comingBlockQueue.Count < 4)
         {
             FillBlockQueue();
         }
@@ -24,7 +24,7 @@ public class BlockSpawner : MonoBehaviour
 
     void FillBlockQueue()
     {
-        while (!(comingBlockQueue.Count >= 3))
+        while (!(comingBlockQueue.Count >= 4))
         {
             tempGo = Instantiate(blockPrefabs[Random.Range(0, blockPrefabs.Length)], new Vector3(5f, 18f, 0), Quaternion.identity);
             tempGo.SetActive(false);

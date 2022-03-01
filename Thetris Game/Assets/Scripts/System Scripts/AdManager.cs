@@ -46,7 +46,7 @@ public class AdManager : MonoBehaviour
         AdRequest request = new AdRequest.Builder().Build();
         this.bannerAd.LoadAd(request);
     }
-    void RequestInterstitial() // her oyun basladiginda transectini cagir
+    public void RequestInterstitial() // create transaction ad when player push the play button
     {
         MobileAds.Initialize(InitStatus => { });
         this.interstitial = new InterstitialAd(InterstitialAdId);
@@ -56,12 +56,11 @@ public class AdManager : MonoBehaviour
     }
 
 
-    public void HandleOnAdClosed(object sender, EventArgs args)
+    public void HandleOnAdClosed(object sender, EventArgs args) //destroy transaction ad and begin game when player closed ad
     {
         MonoBehaviour.print("HandleAdClosed event received");
-        //reklam kapandi oyunu baslat
-        //reklami yok et 
         interstitial.Destroy();
+        SceneManageSystem.LoadNewScene("Game Scene");
     }
 
     public void ShowInterstitialAd()

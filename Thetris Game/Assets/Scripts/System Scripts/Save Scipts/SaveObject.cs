@@ -6,9 +6,10 @@ using UnityEngine;
 public class SaveObject
 {
 
-    public double[] highScores = new double[10];
-
+    public int[] highScores = new int[10];
+    /*
     public int currentLevel = 0;
     public int currentScore = 0;
-    public static Dictionary<Vector2, Tile> mapSave;
+    public int currentLine = 0;
+    public Dictionary<Vector2, Tile> mapSave = new Dictionary<Vector2, Tile>();*/
 }

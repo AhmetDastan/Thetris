@@ -17,6 +17,7 @@ public static class LevelConstant
 
     public static int getScoreAmount(int level, int lineAmount)
     {
+        lineAmount--;
         int score = scoreForLineAmount[lineAmount, 1] * (level + 1);
         return score;
     }
@@ -24,5 +25,40 @@ public static class LevelConstant
     public static int getFrameAmount(int level)
     {
         return frameForLevel[level, 1];
+    }
+
+    public static int TargetLineAmountInLevel(int level)
+    {
+        if(level >= 0 && level <= 9)
+        {
+            return ( (level * 10) + 10);
+        }else if(level >= 10 && level <= 15)
+        {
+            return 100;
+        }
+        else if (level >= 16)
+        {
+            return ((level * 10) - 50);
+        }
+        return 0;
+    }
+
+    public static int LevelNumberForThisLine(int line)
+    {
+        if(line > 10)
+        {
+            line /= 10;
+        }
+        else
+        {
+            return 0;
+        }
+        
+        if(line < 100)
+        {
+            return (line - 1);
+        }
+            
+        return 0;
     }
 }

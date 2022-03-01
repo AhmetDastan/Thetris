@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
     public static Dictionary<Vector2, Tile> _tiles;
 
     public bool findAvailableCell = false;
-
+    internal int destroyedLineAmount = 0;
     void Awake()
     {
         mainCamTransform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
@@ -106,6 +106,7 @@ public class GridManager : MonoBehaviour
                 {
                     if ((j+1) == _width)
                     {
+                        destroyedLineAmount++;
                         AudioManager audioManager = FindObjectOfType<AudioManager>();
                         audioManager.Play("Explosion");
                         for(int k = 0; k < 10; k++)
@@ -121,6 +122,11 @@ public class GridManager : MonoBehaviour
                     continue;
                 }
             }
+        }
+        if(destroyedLineAmount > 0)
+        {
+            FindObjectOfType<GameHandle>().BlocksBreak(destroyedLineAmount);
+            destroyedLineAmount = 0;
         }
     }
 

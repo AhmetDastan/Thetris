@@ -1,21 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class InputManager : MonoBehaviour
 {
-    public static bool isPressedSpace = false;
-    public static bool isPressedLeft = false;
-    public static bool isPressedRight = false;
-    public static bool isPressedDown = false;
-    public static bool isPressedM = false;
-    public static bool isPressedN = false;
+    private Touch touch;
+    private Vector3 touchPos;
+    private Vector3 currentTouchPos;
+    private Vector3 firstTorucPos;
+    private Vector3 endTouchPos;
+
+    internal bool isAvailableTouch = true;
+    private bool isEndedPhase = false;
+
+    private float oneUnitScreenWidth = 0f;
+    private float oneUnitScreenHeight = 0f;
+    
+    private float clickEventAmount = 5f;
+
+    public static bool isLeftSliding = false;
+    public static bool isRightSliding = false;
+    public static bool isLeftRotation = false;
+    public static bool isRightRotation= false;
+    public static bool isSoftDrop = false;
+    public static bool isHardDrop = false;
+    public static bool isBlockHolded = false;
 
 
     public static InputManager Instance;
 
     private void Awake()
     {
+        var verticalSize = Camera.main.orthographicSize * 2.0;
+        var horizontalSize = verticalSize * Screen.width / Screen.height;
+        
+        oneUnitScreenWidth = Screen.width / (float)horizontalSize;
+        oneUnitScreenHeight = Screen.height / (float)verticalSize;
+        clickEventAmount = 5;
+
         if (Instance == null)
         {
             Instance = this;
@@ -30,17 +53,78 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isPressedLeft = (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) ? isPressedLeft = true : isPressedLeft = false;
+        if (Input.touchCount > 0)
+        {
+            touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                touchPos = touch.position;
+                firstTorucPos = touch.position; 
+            }
 
-        isPressedRight = (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) ? isPressedRight = true : isPressedRight = false;
-        
-        isPressedDown = (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) ? isPressedDown = true : isPressedDown = false;
+            if (touch.phase == TouchPhase.Ended)
+            {
+                isSoftDrop = false;
+                isEndedPhase = true;
+                endTouchPos = touch.position;
+            }
 
-        isPressedM = (Input.GetKeyDown(KeyCode.M)) ? isPressedM = true : isPressedM = false;
+            currentTouchPos = touch.position;
+            
+            if ((Mathf.Abs(currentTouchPos.x - touchPos.x) > oneUnitScreenWidth))
+            {
+                if (touchPos.x < currentTouchPos.x)
+                {
+                    isRightSliding = true;
+                }
+                else
+                {
+                    isLeftSliding = true;
+                }
+                touchPos = currentTouchPos;
+            }
 
-        isPressedN = (Input.GetKeyDown(KeyCode.N)) ? isPressedN = true : isPressedN = false;
+            
+            if (touch.deltaPosition.y < -oneUnitScreenHeight)
+            {
+                isSoftDrop = true;
+            }
+            if (isSoftDrop && !isEndedPhase)
+            {
+                isSoftDrop = true;
+            }
 
-        isPressedSpace = (Input.GetKeyDown(KeyCode.Space)) ? isPressedSpace = true : isPressedSpace = false;
+            if ((Mathf.Abs(firstTorucPos.x - endTouchPos.x) < clickEventAmount) && isEndedPhase)
+            {
+                isEndedPhase = false;
+                if (touchPos.x < (Screen.width / 2))
+                {
+                    isRightRotation = true;
+                }
+                else
+                {
+                    isLeftRotation = true;
+                }
+            }
+        }
 
+        if (touch.deltaPosition.y > oneUnitScreenHeight && isEndedPhase)
+        {
+            isBlockHolded = true; 
+            isEndedPhase = false;
+        }
+        else
+        {
+            isBlockHolded = false;
+        }
+        if (touch.deltaPosition.y < -oneUnitScreenHeight && isEndedPhase)
+        {
+            isHardDrop = true; 
+            isEndedPhase = false;
+        }
+        else
+        {
+            isHardDrop = false;
+        }
     }
 }

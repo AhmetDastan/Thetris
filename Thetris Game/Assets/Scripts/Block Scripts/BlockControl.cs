@@ -33,6 +33,8 @@ public class BlockControl : MonoBehaviour
         tempCurrentFrame = currentFrame;
 
         audioManager = FindObjectOfType<AudioManager>();
+
+        InputManager.isHardDrop = false;
     }
 
     void Update()
@@ -84,50 +86,56 @@ public class BlockControl : MonoBehaviour
 
     void BlockMovement()
     {
-        if (InputManager.isPressedLeft)
+        if (InputManager.isLeftSliding && !isHardDrop)
         {
+            InputManager.isLeftSliding = false;
             transform.position += new Vector3(-1, 0, 0);
-            if (!ValidMove(gameObject))
+            if (!ValidMove())
                 transform.position -= new Vector3(-1, 0, 0);
-            LockDelayFrameCounter = 0;
         }
-        if (InputManager.isPressedRight)
+        if (InputManager.isRightSliding && !isHardDrop)
         {
+            InputManager.isRightSliding = false;
             transform.position += new Vector3(1, 0, 0);
-            if (!ValidMove(gameObject))
+            if (!ValidMove())
                 transform.position -= new Vector3(1, 0, 0);
-            LockDelayFrameCounter = 0;
         }
-        if (InputManager.isPressedM && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
+        if (InputManager.isRightRotation && !isHardDrop)//&& (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block")
         {
+            InputManager.isRightRotation = false;
+
             transform.RotateAround(transform.position, Vector3.forward, 90);
 
-            if (!ValidMove(gameObject))
+            if (!ValidMove())
             {
                 if (!WallKick())
                 {
                     transform.RotateAround(transform.position, Vector3.back, 90);
                 }
             }
-            LockDelayFrameCounter = 0;
         }
 
-        if (InputManager.isPressedN && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
+        if (InputManager.isLeftRotation && !isHardDrop)// && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block")
         {
+            InputManager.isLeftRotation = false;
             transform.RotateAround(transform.position, Vector3.back, 90);
 
-            if (!ValidMove(gameObject))
+            if (!ValidMove())
             {
                 if (!WallKick())
                 {
                     transform.RotateAround(transform.position, Vector3.forward, 90);
                 }
             }
-            LockDelayFrameCounter = 0;
         }
-        if (InputManager.isPressedSpace) isHardDrop = true;
+        if (InputManager.isHardDrop) 
+        {
+            isHardDrop = true;
+            LockDelayFrameCounter = LockDelayFrameAmount;
+            LockDelayMaxFrameCounter = LockDelayMaxFrameAmount;
+        }
 
-        isSoftDrop = InputManager.isPressedDown ? isSoftDrop = true : isSoftDrop = false;
+        isSoftDrop = InputManager.isSoftDrop ? isSoftDrop = true : isSoftDrop = false;
 
 
         GosthPiece(gameObject);
@@ -136,9 +144,17 @@ public class BlockControl : MonoBehaviour
     private void FallDown()
     {
         transform.position -= new Vector3(0, 1, 0);
-        if (!ValidMove(gameObject))
+        if (!ValidMove())
         {
             transform.position += new Vector3(0, 1, 0);
+        }
+        if (isSoftDrop)
+        {
+            FindObjectOfType<GameHandle>().ScoreUpdate(1);
+        }
+        if (isHardDrop)
+        {
+            FindObjectOfType<GameHandle>().ScoreUpdate(2);
         }
     }
 
@@ -147,39 +163,37 @@ public class BlockControl : MonoBehaviour
         if (FindObjectOfType<GameHandle>().currentBlock.tag == "I Block")
         {
             transform.position += new Vector3(-2, 0, 0);
-            if (!ValidMove(gameObject))
+            if (!ValidMove())
             {
                 transform.position += new Vector3(4, 0, 0);
-                if (!ValidMove(gameObject))
+                if (!ValidMove())
                 {
                     transform.position += new Vector3(-2, 2, 0);
-                    if (!ValidMove(gameObject))
+                    if (!ValidMove())
                     {
                         transform.position += new Vector3(0, -2, 0);
                         return false;
                     }
                 }
             }
-            LockDelayFrameCounter = 0;
             return true;
         }
         else if (FindObjectOfType<GameHandle>().currentBlock.tag != "I Block")
         {
             transform.position += new Vector3(-1, 0, 0);
-            if (!ValidMove(gameObject))
+            if (!ValidMove())
             {
                 transform.position += new Vector3(2, 0, 0);
-                if (!ValidMove(gameObject))
+                if (!ValidMove())
                 {
                     transform.position += new Vector3(-1, 1, 0);
-                    if (!ValidMove(gameObject))
+                    if (!ValidMove())
                     {
                         transform.position += new Vector3(0, -1, 0);
                         return false;
                     }
                 }
             }
-            LockDelayFrameCounter = 0;
             return true;
         }
         return true;
@@ -220,22 +234,23 @@ public class BlockControl : MonoBehaviour
         return false;
     }
 
-    public bool ValidMove(GameObject go)
+    public bool ValidMove()
     {
         int roundedX, roundedY;
         Tile tile;
-        foreach(Transform child in go.transform)
+        foreach (Transform child in gameObject.transform)
         {
             roundedX = Mathf.RoundToInt(child.transform.position.x);
             roundedY = Mathf.RoundToInt(child.transform.position.y);
 
             tile = GridManager.GetTileAtPosition(new Vector2(roundedX, roundedY));
 
-            if ((tile == null || !tile._isEmpty) ) 
+            if ((tile == null || !tile._isEmpty))
             {
                 return false;
             }
         }
+        LockDelayFrameCounter = 0;
         return true;
     }
 
@@ -265,5 +280,23 @@ public class BlockControl : MonoBehaviour
             GridManager._tiles[new Vector2(roundedX, roundedY)].ghostBlock.SetActive(true);
         }
         Destroy(tempGo);
+    }
+    public bool ValidMove(GameObject go)
+    {
+        int roundedX, roundedY;
+        Tile tile;
+        foreach (Transform child in go.transform)
+        {
+            roundedX = Mathf.RoundToInt(child.transform.position.x);
+            roundedY = Mathf.RoundToInt(child.transform.position.y);
+
+            tile = GridManager.GetTileAtPosition(new Vector2(roundedX, roundedY));
+
+            if ((tile == null || !tile._isEmpty))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

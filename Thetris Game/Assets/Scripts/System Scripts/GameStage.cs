@@ -34,7 +34,9 @@ public class GameStage : MonoBehaviour
             isGameScene = true;
             isStartedNewGame = true;
         }
+        isGameOver = false;
     }
+
 
     public static void IsGameOver(GameObject currentBlock)
     {

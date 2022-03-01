@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUiManager : MonoBehaviour
 {
@@ -9,17 +10,21 @@ public class GameUiManager : MonoBehaviour
     [SerializeField] internal HoldBlock holdBlock;
     [SerializeField] internal UiBlockQueue uiBlockQueue;
 
-   [SerializeField] internal Sprite[] blocksSprite;
+    [SerializeField] internal Text line;
+    [SerializeField] internal Text level;
+    [SerializeField] internal Text score;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] internal Sprite[] blocksSprite;
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        UpgradeGameUiData();
+    }
+    void UpgradeGameUiData()
+    {
+        line.text = "Line " + gameHandle.totalLine.ToString();
+        level.text = "Lvl " + gameHandle.levelNum.ToString();
+        score.text = "Score " + gameHandle.totalScore.ToString();
     }
 }

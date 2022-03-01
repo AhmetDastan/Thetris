@@ -25,17 +25,22 @@ public class HoldBlock : MonoBehaviour
 
     public void SwichBlock()
     {
-        if (isHoldAreaEmpty)
+        if (!InputManager.isHardDrop)
         {
-            isHoldAreaEmpty = false;
+            if (isHoldAreaEmpty)
+            {
+                isHoldAreaEmpty = false;
 
-            SetBlocktoHold();
-            gameUiManager.gameHandle.isNeedNewBlock = true;
-        } else if (replaceable)
-        {
-            replaceable = false;
+                SetBlocktoHold();
+                gameUiManager.gameHandle.isNeedNewBlock = true;
+            }
+            else if (replaceable)
+            {
+                replaceable = false;
 
-            SwitchBtwHoldAndHand();
+                SwitchBtwHoldAndHand();
+            }
+            ChangeHoldButtonImage();
         }
     }
 
@@ -44,7 +49,7 @@ public class HoldBlock : MonoBehaviour
         gameUiManager.gameHandle.currentBlock.SetActive(false);
         blockInHold = gameUiManager.gameHandle.currentBlock;
         blockInHold = gameUiManager.gameHandle.currentBlock;
-        ChangeHoldButtonImage();
+        
     }
 
     void SwitchBtwHoldAndHand()
@@ -54,7 +59,6 @@ public class HoldBlock : MonoBehaviour
         gameUiManager.gameHandle.currentBlock = tempGo;
         gameUiManager.gameHandle.currentBlock.SetActive(true);
         gameUiManager.gameHandle.currentBlock.transform.position = new Vector2(5, 18);
-        ChangeHoldButtonImage();
     }
 
     private void ChangeHoldButtonImage()
@@ -68,5 +72,12 @@ public class HoldBlock : MonoBehaviour
             }
         }
     }
-
+    private void Update()
+    {
+        if (InputManager.isBlockHolded)
+        {
+            InputManager.isBlockHolded = false;
+            SwichBlock();
+        }
+    }
 }
