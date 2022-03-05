@@ -188,6 +188,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3358762670617274638, guid: 90b5fe25296327f4fb710591c8d40282,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3358762670617274639, guid: 90b5fe25296327f4fb710591c8d40282,
         type: 3}
       propertyPath: sounds.Array.size
@@ -848,7 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2735849, g: 0.10711107, b: 0.10711107, a: 0.3882353}
+  m_Color: {r: 0.2735849, g: 0.10711107, b: 0.10711107, a: 0.7490196}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:

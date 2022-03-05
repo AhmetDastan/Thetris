@@ -13,10 +13,16 @@ public class InputManager : MonoBehaviour
 
     internal bool isAvailableTouch = true;
     private bool isEndedPhase = false;
+    private bool isBeginTouch = false;
+    private bool isMovedTouch = false;
+    private bool isStationaryTouch = false;
 
     private float oneUnitScreenWidth = 0f;
     private float oneUnitScreenHeight = 0f;
-    
+
+    private float currentTouchDeltaPositionX = 0;
+    private float currentTouchDeltaPositionY = 0;
+
     private float clickEventAmount = 5f;
 
     public static bool isLeftSliding = false;
@@ -39,6 +45,7 @@ public class InputManager : MonoBehaviour
         oneUnitScreenHeight = Screen.height / (float)verticalSize;
         clickEventAmount = 5;
 
+        isEndedPhase = false;
         if (Instance == null)
         {
             Instance = this;
@@ -53,78 +60,114 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
+
+            currentTouchPos = touch.position;
+
             if (touch.phase == TouchPhase.Began)
             {
                 touchPos = touch.position;
-                firstTorucPos = touch.position; 
+                firstTorucPos = touch.position;
+                //isBeginTouch = true;
             }
+
+            if (touch.phase == TouchPhase.Moved)
+            {
+                isMovedTouch = true;
+            }
+            else isMovedTouch = false;
 
             if (touch.phase == TouchPhase.Ended)
             {
-                isSoftDrop = false;
                 isEndedPhase = true;
                 endTouchPos = touch.position;
+                //                Debug.Log("current delta + ended " + currentTouchDeltaPositionY + " ve " + oneUnitScreenHeight + " ve " + isEndedPhase);
             }
+            else isEndedPhase = false;
 
-            currentTouchPos = touch.position;
-            
-            if ((Mathf.Abs(currentTouchPos.x - touchPos.x) > oneUnitScreenWidth))
+            if (touch.phase == TouchPhase.Stationary)
             {
-                if (touchPos.x < currentTouchPos.x)
-                {
-                    isRightSliding = true;
-                }
-                else
-                {
-                    isLeftSliding = true;
-                }
-                touchPos = currentTouchPos;
-            }
+                isStationaryTouch = true;
 
-            
-            if (touch.deltaPosition.y < -oneUnitScreenHeight)
-            {
-                isSoftDrop = true;
             }
-            if (isSoftDrop && !isEndedPhase)
-            {
-                isSoftDrop = true;
-            }
+            else isStationaryTouch = false;
 
-            if ((Mathf.Abs(firstTorucPos.x - endTouchPos.x) < clickEventAmount) && isEndedPhase)
-            {
-                isEndedPhase = false;
-                if (touchPos.x < (Screen.width / 2))
-                {
-                    isRightRotation = true;
-                }
-                else
-                {
-                    isLeftRotation = true;
-                }
-            }
+            currentTouchDeltaPositionY = touch.deltaPosition.y;
+
         }
 
-        if (touch.deltaPosition.y > oneUnitScreenHeight && isEndedPhase)
+        Debug.Log("isstationar " + isStationaryTouch);
+
+        //Debug.Log("1 " + (touch.deltaPosition.y < -oneUnitScreenHeight && isMovedTouch));
+        //Debug.Log("2 " + (isSoftDrop && isStationaryTouch));
+
+        //Debug.Log("currentDelta" + currentTouchDeltaPositionY + " ve " + touch.deltaPosition.y + " ve " + oneUnitScreenHeight);
+        //soft drope
+        if ( (touch.deltaPosition.y < -oneUnitScreenHeight && isMovedTouch ) || (isSoftDrop && (isStationaryTouch || isMovedTouch) ))
         {
-            isBlockHolded = true; 
-            isEndedPhase = false;
+            isSoftDrop = true;
+            Debug.Log("is soft " + isSoftDrop);
         }
-        else
+        else isSoftDrop = false;
+
+
+
+        //Debug.Log("current delta + ended " + touch.deltaPosition.y + " " +currentTouchDeltaPositionY + " ve " + oneUnitScreenHeight + " ve " + isEndedPhase);
+        /*  if(currentTouchDeltaPositionY == 0)
+          {
+              currentTouchDeltaPositionY = touch.deltaPosition.y;
+          }*/
+
+        //harddrope
+        /*if (currentTouchDeltaPositionY < -oneUnitScreenHeight && isEndedPhase)
         {
-            isBlockHolded = false;
-        }
-        if (touch.deltaPosition.y < -oneUnitScreenHeight && isEndedPhase)
-        {
-            isHardDrop = true; 
-            isEndedPhase = false;
+            isHardDrop = true;
         }
         else
         {
             isHardDrop = false;
         }
+        //sliding
+        if ((Mathf.Abs(currentTouchPos.x - touchPos.x) > oneUnitScreenWidth))
+        {
+            if (touchPos.x < currentTouchPos.x)
+            {
+                isRightSliding = true;
+            }
+            else
+            {
+                isLeftSliding = true;
+            }
+            touchPos = currentTouchPos;
+        }
+
+        //hold area
+        if (currentTouchDeltaPositionY > oneUnitScreenHeight && isEndedPhase)
+        {
+            isBlockHolded = true;
+        }
+        else
+        {
+            isBlockHolded = false;
+        }
+
+        
+        
+
+        //Rotation
+        if ((Mathf.Abs(firstTorucPos.x - endTouchPos.x) < clickEventAmount) && isEndedPhase)
+        {
+            if (touchPos.x < (Screen.width / 2))
+            {
+                isRightRotation = true;
+            }
+            else
+            {
+                isLeftRotation = true;
+            }
+        } */ 
     }
 }

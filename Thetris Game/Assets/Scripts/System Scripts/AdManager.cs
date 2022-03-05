@@ -27,6 +27,7 @@ public class AdManager : MonoBehaviour
     {
         MobileAds.Initialize(InitializationStatus => { });
         RequestBanner();
+        RequestInterstitial();
     }
 
     private BannerView bannerAd;
@@ -51,16 +52,21 @@ public class AdManager : MonoBehaviour
         MobileAds.Initialize(InitStatus => { });
         this.interstitial = new InterstitialAd(InterstitialAdId);
 
+        this.interstitial.OnAdClosed += HandleInterstitialClosed;
+
         AdRequest request = new AdRequest.Builder().Build();
         this.interstitial.LoadAd(request);
+
     }
 
-
-    public void HandleOnAdClosed(object sender, EventArgs args) //destroy transaction ad and begin game when player closed ad
+    public void HandleInterstitialClosed(object sender, EventArgs args) //destroy transaction ad and begin game when player closed ad
     {
         MonoBehaviour.print("HandleAdClosed event received");
+
         interstitial.Destroy();
         SceneManageSystem.LoadNewScene("Game Scene");
+
+        Debug.Log("sahne yuklenme di ");
     }
 
     public void ShowInterstitialAd()
@@ -68,9 +74,7 @@ public class AdManager : MonoBehaviour
         if (this.interstitial.IsLoaded())
         {
             this.interstitial.Show();
+            RequestInterstitial();
         }
     }
-
-
-
 }

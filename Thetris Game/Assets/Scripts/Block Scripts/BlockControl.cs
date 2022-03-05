@@ -86,7 +86,7 @@ public class BlockControl : MonoBehaviour
 
     void BlockMovement()
     {
-        if (InputManager.isLeftSliding && !isHardDrop)
+       if (InputManager.isLeftSliding && !isHardDrop)
         {
             InputManager.isLeftSliding = false;
             transform.position += new Vector3(-1, 0, 0);
@@ -136,7 +136,7 @@ public class BlockControl : MonoBehaviour
         }
 
         isSoftDrop = InputManager.isSoftDrop ? isSoftDrop = true : isSoftDrop = false;
-
+       
 
         GosthPiece(gameObject);
     }

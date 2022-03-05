@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class ButtonScript : MonoBehaviour
 {
@@ -30,8 +31,7 @@ public class ButtonScript : MonoBehaviour
         }
         else if(gameObject.name == "Play")
         {
-            FindObjectOfType<AdManager>().RequestInterstitial();
-            
+            FindObjectOfType<AdManager>().ShowInterstitialAd();
         }
     }
 }
