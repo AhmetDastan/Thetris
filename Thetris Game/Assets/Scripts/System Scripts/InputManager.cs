@@ -12,15 +12,13 @@ public class InputManager : MonoBehaviour
     private Vector3 endTouchPos;
 
     internal bool isAvailableTouch = true;
-    private bool isEndedPhase = false;
-    private bool isBeginTouch = false;
+    private bool isEndedPhase = false; 
     private bool isMovedTouch = false;
     private bool isStationaryTouch = false;
 
     private float oneUnitScreenWidth = 0f;
     private float oneUnitScreenHeight = 0f;
-
-    private float currentTouchDeltaPositionX = 0;
+     
     private float currentTouchDeltaPositionY = 0;
 
     private float clickEventAmount = 5f;
@@ -59,8 +57,7 @@ public class InputManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-
+    { 
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
@@ -70,23 +67,26 @@ public class InputManager : MonoBehaviour
             if (touch.phase == TouchPhase.Began)
             {
                 touchPos = touch.position;
-                firstTorucPos = touch.position;
-                //isBeginTouch = true;
+                firstTorucPos = touch.position; 
             }
 
             if (touch.phase == TouchPhase.Moved)
             {
                 isMovedTouch = true;
+
             }
             else isMovedTouch = false;
+
 
             if (touch.phase == TouchPhase.Ended)
             {
                 isEndedPhase = true;
                 endTouchPos = touch.position;
-                //                Debug.Log("current delta + ended " + currentTouchDeltaPositionY + " ve " + oneUnitScreenHeight + " ve " + isEndedPhase);
             }
-            else isEndedPhase = false;
+            else
+            {
+                currentTouchDeltaPositionY = touch.deltaPosition.y;
+            }
 
             if (touch.phase == TouchPhase.Stationary)
             {
@@ -94,42 +94,8 @@ public class InputManager : MonoBehaviour
 
             }
             else isStationaryTouch = false;
-
-            currentTouchDeltaPositionY = touch.deltaPosition.y;
-
         }
 
-        Debug.Log("isstationar " + isStationaryTouch);
-
-        //Debug.Log("1 " + (touch.deltaPosition.y < -oneUnitScreenHeight && isMovedTouch));
-        //Debug.Log("2 " + (isSoftDrop && isStationaryTouch));
-
-        //Debug.Log("currentDelta" + currentTouchDeltaPositionY + " ve " + touch.deltaPosition.y + " ve " + oneUnitScreenHeight);
-        //soft drope
-        if ( (touch.deltaPosition.y < -oneUnitScreenHeight && isMovedTouch ) || (isSoftDrop && (isStationaryTouch || isMovedTouch) ))
-        {
-            isSoftDrop = true;
-            Debug.Log("is soft " + isSoftDrop);
-        }
-        else isSoftDrop = false;
-
-
-
-        //Debug.Log("current delta + ended " + touch.deltaPosition.y + " " +currentTouchDeltaPositionY + " ve " + oneUnitScreenHeight + " ve " + isEndedPhase);
-        /*  if(currentTouchDeltaPositionY == 0)
-          {
-              currentTouchDeltaPositionY = touch.deltaPosition.y;
-          }*/
-
-        //harddrope
-        /*if (currentTouchDeltaPositionY < -oneUnitScreenHeight && isEndedPhase)
-        {
-            isHardDrop = true;
-        }
-        else
-        {
-            isHardDrop = false;
-        }
         //sliding
         if ((Mathf.Abs(currentTouchPos.x - touchPos.x) > oneUnitScreenWidth))
         {
@@ -144,22 +110,10 @@ public class InputManager : MonoBehaviour
             touchPos = currentTouchPos;
         }
 
-        //hold area
-        if (currentTouchDeltaPositionY > oneUnitScreenHeight && isEndedPhase)
-        {
-            isBlockHolded = true;
-        }
-        else
-        {
-            isBlockHolded = false;
-        }
-
-        
-        
-
         //Rotation
         if ((Mathf.Abs(firstTorucPos.x - endTouchPos.x) < clickEventAmount) && isEndedPhase)
         {
+            isEndedPhase = false;
             if (touchPos.x < (Screen.width / 2))
             {
                 isRightRotation = true;
@@ -168,6 +122,39 @@ public class InputManager : MonoBehaviour
             {
                 isLeftRotation = true;
             }
-        } */ 
+        }
+
+
+        //harddrope
+        if (touch.deltaPosition.y < -2*oneUnitScreenHeight )
+        {
+            isHardDrop = true;
+        }
+        else
+        {
+            isHardDrop = false;
+        }
+        //soft drop 
+        if ( touch.deltaPosition.y < -oneUnitScreenHeight || ( (isMovedTouch || isStationaryTouch) && isSoftDrop) )
+        {
+            isSoftDrop = true;
+
+        }
+        else isSoftDrop = false;
+
+        
+
+        //hold area
+        if (currentTouchDeltaPositionY < -oneUnitScreenHeight && isEndedPhase)
+        {
+            isEndedPhase = false;
+            isBlockHolded = true;
+        }
+        else
+        {
+            isBlockHolded = false;
+        }
+
+        isEndedPhase = false;
     }
 }

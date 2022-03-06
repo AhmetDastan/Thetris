@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameHandle : MonoBehaviour
-{
-    private static GameHandle _instance = null;
-
-
+{ 
     [SerializeField] internal BlockSpawner blockSpawner;
     [SerializeField] internal GameUiManager gameUiManager;
 
@@ -27,24 +24,7 @@ public class GameHandle : MonoBehaviour
     [SerializeField] internal GameObject gameOverPanel;
 
     public SaveObject saveObject;
-    public AudioManager audioManager;
-   /* private void Awake()
-    {
-        Debug.Log("bananas");
-
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        isStartNewGame = true;
-
-    }*/
+    public AudioManager audioManager; 
 
     void Start()
     {
@@ -56,15 +36,16 @@ public class GameHandle : MonoBehaviour
         //isStartNewGame = true;
         GameStage.isStartedNewGame = true;
 
-        AdjustNewGameProporties();
+        AdjustNewGameProporties(); 
         LoadObjectFromSaveFile();
+        //SaveManager.DeleteFile();
     }
 
     void Update()
     {
-        if (saveObject.highScores.Length <= 0)
+        if (saveObject != null && saveObject.highScores.Length > 0)
         {
-            Debug.Log("item yok aga");
+            Debug.Log("iceride adam var");
         }
         if ( GameStage.isStartedNewGame && currentBlock == null) //GameStage.isGameScene &&
         {
@@ -133,19 +114,24 @@ public class GameHandle : MonoBehaviour
     {
         totalScore += scoreAmount;
     }
+   
     void LoadObjectFromSaveFile()
     {
         saveObject = SaveManager.Load();
     }
     void SaveObjectToSaveFileForGameOver()
     {
-        RearrangeBestScore(totalScore);
+       RearrangeBestScore(totalScore);
 
         SaveManager.Save(saveObject);
     }
 
     void RearrangeBestScore(int lastScore)
-    {
+    { 
+        if(saveObject == null)
+        {
+            return;
+        }
         int tempInt = 0;
         for (int i = 0; i < saveObject.highScores.Length; i++)
         {
@@ -176,10 +162,4 @@ public class GameHandle : MonoBehaviour
             }
         }
     }
-}
-/* 
-    notlar  =>
-
-1) ui manager da game over olunca main music sesi 0da ayarlaniyo, play veya menu tekrarin da basinlan menu ile tekrardan main musihi cal
- 
- */
+} 

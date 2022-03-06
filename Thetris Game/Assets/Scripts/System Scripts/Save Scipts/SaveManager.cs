@@ -40,7 +40,9 @@ public  class SaveManager
         }
         else
         {
-            Debug.Log("There is no a file doc ! ");
+            Debug.Log("There is no file doc ! ");
+            FileStream file = new FileStream(GetFulPath(), FileMode.OpenOrCreate);
+            file.Close();
         }
         return null;
     }
@@ -60,4 +62,16 @@ public  class SaveManager
         return Application.persistentDataPath + "/" + directory + "/" + fileName;
     }
 
+    public  static void DeleteFile()
+    {
+        if (SaveExists())
+        {
+            File.Delete(GetFulPath());
+            Debug.Log("File was deleted");
+        }
+        else
+        {
+            Debug.Log("File could not find");
+        }
+    }
 }

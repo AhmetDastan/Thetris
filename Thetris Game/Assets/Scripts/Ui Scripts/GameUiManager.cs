@@ -10,6 +10,8 @@ public class GameUiManager : MonoBehaviour
     [SerializeField] internal HoldBlock holdBlock;
     [SerializeField] internal UiBlockQueue uiBlockQueue;
 
+    [SerializeField] internal GameObject pauseButton;
+
     [SerializeField] internal Text line;
     [SerializeField] internal Text level;
     [SerializeField] internal Text score;
@@ -25,6 +27,11 @@ public class GameUiManager : MonoBehaviour
     {
         line.text = "Line " + gameHandle.totalLine.ToString();
         level.text = "Lvl " + gameHandle.levelNum.ToString();
-        score.text = "Score " + gameHandle.totalScore.ToString();
+        if(gameHandle.saveObject != null && gameHandle.saveObject.highScores[0] > 0)
+        {
+            score.text = "Score " + gameHandle.totalScore.ToString() + " / " + gameHandle.saveObject.highScores[0];
+        }
+        else score.text = "Score " + gameHandle.totalScore.ToString();
+
     }
 }

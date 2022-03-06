@@ -64,9 +64,7 @@ public class AdManager : MonoBehaviour
         MonoBehaviour.print("HandleAdClosed event received");
 
         interstitial.Destroy();
-        SceneManageSystem.LoadNewScene("Game Scene");
-
-        Debug.Log("sahne yuklenme di ");
+        SceneManageSystem.LoadNewScene("Game Scene"); 
     }
 
     public void ShowInterstitialAd()
