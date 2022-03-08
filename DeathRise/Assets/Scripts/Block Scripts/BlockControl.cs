@@ -100,7 +100,7 @@ public class BlockControl : MonoBehaviour
             if (!ValidMove())
                 transform.position -= new Vector3(1, 0, 0);
         }
-        if (InputManager.isRightRotation && !isHardDrop)//&& (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block")
+        if (InputManager.isRightRotation && !isHardDrop && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
         {
             InputManager.isRightRotation = false;
 
@@ -115,7 +115,7 @@ public class BlockControl : MonoBehaviour
             }
         }
 
-        if (InputManager.isLeftRotation && !isHardDrop)// && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block")
+        if (InputManager.isLeftRotation && !isHardDrop && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
         {
             InputManager.isLeftRotation = false;
             transform.RotateAround(transform.position, Vector3.back, 90);
@@ -236,6 +236,10 @@ public class BlockControl : MonoBehaviour
 
     public bool ValidMove()
     {
+        if (PauseButton.isGamePaused)
+        {
+            return false;
+        }
         int roundedX, roundedY;
         Tile tile;
         foreach (Transform child in gameObject.transform)

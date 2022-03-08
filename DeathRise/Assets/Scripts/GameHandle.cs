@@ -32,21 +32,18 @@ public class GameHandle : MonoBehaviour
 
         isBlockLocked = false;
         isNeedNewBlock = false;
-        isBlocksBreak = false;
-        //isStartNewGame = true;
+        isBlocksBreak = false; 
         GameStage.isStartedNewGame = true;
 
         AdjustNewGameProporties(); 
-        LoadObjectFromSaveFile();
-        //SaveManager.DeleteFile();
+
+        LoadObjectFromSaveFile(); 
+        //SaveManager.DeleteFile(); 
     }
 
     void Update()
     {
-        if (saveObject != null && saveObject.highScores.Length > 0)
-        {
-            Debug.Log("iceride adam var");
-        }
+        
         if ( GameStage.isStartedNewGame && currentBlock == null) //GameStage.isGameScene &&
         {
             gameOverPanel.SetActive(false);
@@ -117,7 +114,14 @@ public class GameHandle : MonoBehaviour
    
     void LoadObjectFromSaveFile()
     {
-        saveObject = SaveManager.Load();
+        if(saveObject == null)
+        {
+            Debug.Log("save file cold not find");
+        }
+        else
+        {
+            saveObject = SaveManager.Load();
+        }
     }
     void SaveObjectToSaveFileForGameOver()
     {

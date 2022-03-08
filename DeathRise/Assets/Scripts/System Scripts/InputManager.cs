@@ -126,7 +126,7 @@ public class InputManager : MonoBehaviour
 
 
         //harddrope
-        if (touch.deltaPosition.y < -2*oneUnitScreenHeight )
+        if (currentTouchDeltaPositionY < -2*oneUnitScreenHeight )
         {
             isHardDrop = true;
         }
@@ -142,10 +142,9 @@ public class InputManager : MonoBehaviour
         }
         else isSoftDrop = false;
 
-        
 
         //hold area
-        if (currentTouchDeltaPositionY < -oneUnitScreenHeight && isEndedPhase)
+        if (currentTouchDeltaPositionY > 2 * oneUnitScreenHeight )
         {
             isEndedPhase = false;
             isBlockHolded = true;
@@ -156,5 +155,6 @@ public class InputManager : MonoBehaviour
         }
 
         isEndedPhase = false;
+        currentTouchDeltaPositionY = 0;
     }
 }

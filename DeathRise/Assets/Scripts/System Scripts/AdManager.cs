@@ -33,8 +33,8 @@ public class AdManager : MonoBehaviour
     private BannerView bannerAd;
     private InterstitialAd interstitial;
 
-    string bannerAdId = "ca-app-pub-3940256099942544/6300978111";
-    string InterstitialAdId = "ca-app-pub-3940256099942544/1033173712";
+    string bannerAdId = "ca-app-pub-4198000366054577/2386472107"; // test ad => ca-app-pub-3940256099942544/6300978111
+    string InterstitialAdId = "ca-app-pub-4198000366054577/4673724096";  //test ad => ca-app-pub-3940256099942544/1033173712
 
     private void Start()
     {

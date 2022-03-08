@@ -40,9 +40,7 @@ public  class SaveManager
         }
         else
         {
-            Debug.Log("There is no file doc ! ");
-            FileStream file = new FileStream(GetFulPath(), FileMode.OpenOrCreate);
-            file.Close();
+            Debug.Log("There is no file doc ! "); 
         }
         return null;
     }
