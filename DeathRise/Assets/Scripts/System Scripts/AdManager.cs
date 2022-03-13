@@ -33,8 +33,8 @@ public class AdManager : MonoBehaviour
     private BannerView bannerAd;
     private InterstitialAd interstitial;
 
-    string bannerAdId = "ca-app-pub-4198000366054577/2386472107"; // test ad => ca-app-pub-3940256099942544/6300978111
-    string InterstitialAdId = "ca-app-pub-4198000366054577/4673724096";  //test ad => ca-app-pub-3940256099942544/1033173712
+    string bannerAdId = "ca-app-pub-4198000366054577/2386472107"; // test ad => ca-app-pub-3940256099942544/6300978111   -- orj ca-app-pub-4198000366054577/2386472107
+    string InterstitialAdId = "ca-app-pub-4198000366054577/4673724096";  //test ad => ca-app-pub-3940256099942544/1033173712  -- otj ca-app-pub-4198000366054577/4673724096
 
     private void Start()
     {
@@ -53,6 +53,7 @@ public class AdManager : MonoBehaviour
         this.interstitial = new InterstitialAd(InterstitialAdId);
 
         this.interstitial.OnAdClosed += HandleInterstitialClosed;
+        this.interstitial.OnAdFailedToLoad += HandleOnAdFailedToLoad;
 
         AdRequest request = new AdRequest.Builder().Build();
         this.interstitial.LoadAd(request);
@@ -67,12 +68,22 @@ public class AdManager : MonoBehaviour
         SceneManageSystem.LoadNewScene("Game Scene"); 
     }
 
+    public void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
+    { 
+        SceneManageSystem.LoadNewScene("Game Scene"); 
+    }
     public void ShowInterstitialAd()
     {
         if (this.interstitial.IsLoaded())
         {
             this.interstitial.Show();
             RequestInterstitial();
+        }
+        else
+        { 
+            interstitial.Destroy();
+            RequestInterstitial();
+            SceneManageSystem.LoadNewScene("Game Scene"); 
         }
     }
 }
