@@ -26,9 +26,7 @@ public class PauseButton : MonoBehaviour
     {
         if (!isGamePaused)
         {
-            isGamePaused = true;
-            
-
+            isGamePaused = true; 
         }
         else
         {

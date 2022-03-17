@@ -14,6 +14,7 @@ public class AdManager : MonoBehaviour
     {
         if (_instance == null)
         {
+            
             _instance = this;
             DontDestroyOnLoad(this);
         }
@@ -23,25 +24,24 @@ public class AdManager : MonoBehaviour
         }
     }
 
-    void OnLevelWasLoaded()
-    {
-        MobileAds.Initialize(InitializationStatus => { });
-        RequestBanner();
-        RequestInterstitial();
-    }
-
     private BannerView bannerAd;
     private InterstitialAd interstitial;
 
-    string bannerAdId = "ca-app-pub-4198000366054577/2386472107"; // test ad => ca-app-pub-3940256099942544/6300978111   -- orj ca-app-pub-4198000366054577/2386472107
-    string InterstitialAdId = "ca-app-pub-4198000366054577/4673724096";  //test ad => ca-app-pub-3940256099942544/1033173712  -- otj ca-app-pub-4198000366054577/4673724096
+    string appId = "ca-app-pub-4198000366054577~7519379286";
+    string bannerAdId = "ca-app-pub-3940256099942544/6300978111"; // test ad => ca-app-pub-3940256099942544/6300978111   -- orj ca-app-pub-4198000366054577/2386472107
+    string InterstitialAdId = "ca-app-pub-3940256099942544/1033173712";  //test ad => ca-app-pub-3940256099942544/1033173712  -- otj ca-app-pub-4198000366054577/4673724096
 
-    private void Start()
+     private void Start()
     {
-        RequestBanner();
-        RequestInterstitial();
-    }
-    private void RequestBanner()
+        appId = "ca-app-pub-4198000366054577~7519379286";
+        bannerAdId = "ca-app-pub-3940256099942544/6300978111"; // test ad => ca-app-pub-3940256099942544/6300978111   -- orj ca-app-pub-4198000366054577/2386472107
+             InterstitialAdId = "ca-app-pub-3940256099942544/1033173712";  //test ad => ca-app-pub-3940256099942544/1033173712  -- otj ca-app-pub-4198000366054577/4673724096
+        
+             RequestBanner();
+            RequestInterstitial();
+     }
+
+    public void RequestBanner()
     {
         this.bannerAd = new BannerView(bannerAdId, AdSize.SmartBanner, AdPosition.Bottom);
         AdRequest request = new AdRequest.Builder().Build();

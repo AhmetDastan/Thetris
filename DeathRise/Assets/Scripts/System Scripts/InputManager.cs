@@ -126,7 +126,7 @@ public class InputManager : MonoBehaviour
 
 
         //harddrope
-        if (currentTouchDeltaPositionY < -2*oneUnitScreenHeight )
+        if (currentTouchDeltaPositionY < -4*oneUnitScreenHeight )
         {
             isHardDrop = true;
         }

@@ -8,8 +8,9 @@ public class ButtonScript : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
-    {
+    { 
         gameObject.GetComponent<Button>().onClick.AddListener(clickButton);
+        
     }
 
 
@@ -31,7 +32,9 @@ public class ButtonScript : MonoBehaviour
         }
         else if(gameObject.name == "Play")
         {
-            FindObjectOfType<AdManager>().ShowInterstitialAd();
+            FindObjectOfType<AdManager>().ShowInterstitialAd(); 
         }
     }
+
+   
 }

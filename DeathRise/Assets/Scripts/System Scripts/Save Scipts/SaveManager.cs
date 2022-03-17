@@ -8,40 +8,62 @@ using System.Runtime.Serialization;
 public  class SaveManager 
 {
     public static string directory = "SaveData";
-    public static string fileName = "SaveFile.txt";
+    public static string fileName = "SaveFile.dat";
     public static void Save(SaveObject so)
     {
+        FileStream fileSave = new FileStream(GetFulPath(), FileMode.OpenOrCreate); 
         BinaryFormatter bf = new BinaryFormatter();
 
-        FileStream file = new FileStream(GetFulPath(), FileMode.OpenOrCreate);
-        bf.Serialize(file, so);
-        file.Close();
+        Debug.Log("actim");
+
+        bf.Serialize(fileSave, so);
+        Debug.Log("kaydettim");
+
+        fileSave.Close();
         Debug.Log("dosya save etti");
+        
+       /* using (var file = File.Open(GetFulPath(), FileMode.Create, FileAccess.Write, FileShare.Write))
+        {
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(file, so);
+        }*/
     }
 
-    public static SaveObject Load()
+    public static SaveObject Load()  
     {
         if (SaveExists())
         {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(GetFulPath(), FileMode.Open);
+            if(file.Length > 0)
+            {
+                SaveObject so = (SaveObject)bf.Deserialize(file);
+                Debug.Log("save is succesful");
+                return so;
+            }
+            Debug.Log("file is empty");
+            file.Close();
+        }
+        
+     /*   if (SaveExists())
+        { 
             try
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(GetFulPath(), FileMode.Open);
                 SaveObject so = (SaveObject)bf.Deserialize(file);
-                file.Close();
-
-                Debug.Log("dosya load etti");
+                file.Close();  
                 return so;
             }
             catch(SerializationException)
             {
                 Debug.Log("Failed to load file ! ");
-            }
+            } 
         }
         else
         {
             Debug.Log("There is no file doc ! "); 
-        }
+        }*/
         return null;
     }
 

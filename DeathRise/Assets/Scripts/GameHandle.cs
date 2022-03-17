@@ -24,10 +24,10 @@ public class GameHandle : MonoBehaviour
     [SerializeField] internal GameObject gameOverPanel;
 
     public SaveObject saveObject;
-    public AudioManager audioManager; 
-
+    public AudioManager audioManager;
     void Start()
     {
+        GameStage.isGameOver = false;
         audioManager = FindObjectOfType<AudioManager>();
 
         isBlockLocked = false;
@@ -37,55 +37,60 @@ public class GameHandle : MonoBehaviour
 
         AdjustNewGameProporties(); 
 
-        LoadObjectFromSaveFile(); 
-        //SaveManager.DeleteFile(); 
+        LoadObjectFromSaveFile();
+
+        FindObjectOfType<AdManager>().RequestBanner(); 
     }
 
     void Update()
     {
-        
-        if ( GameStage.isStartedNewGame && currentBlock == null) //GameStage.isGameScene &&
+        if (!GameStage.isGameOver)
         {
-            gameOverPanel.SetActive(false);
-            isStartNewGame = false;
-            currentFrame = LevelConstant.getFrameAmount(levelNum);
-            currentBlock = blockSpawner.SpawnBlock();
-        }
-
-        if (isNeedNewBlock || isBlockLocked)
-        {
-            GameStage.IsGameOver(currentBlock);
-            if (GameStage.isGameOver && isBlockLocked)
+            Debug.Log("oyun bitmesi ve durmasi " + !GameStage.isGameOver  );
+            if (GameStage.isStartedNewGame && currentBlock == null)  
             {
-                Debug.Log("Game Over ! ");
-                gameOverPanel.SetActive(true);
-                audioManager.AdjustVolume("MainMusic", 0);
-                audioManager.Play("GameOver");
-                audioManager.AdjustVolume("GameOver", 0.6f);
-
-                SaveObjectToSaveFileForGameOver();
-            }
-            else
-            {
+                gameOverPanel.SetActive(false);
+                isStartNewGame = false;
                 currentFrame = LevelConstant.getFrameAmount(levelNum);
                 currentBlock = blockSpawner.SpawnBlock();
-                
             }
-            isNeedNewBlock = false;
-            isBlockLocked = false;
-            GameStage.isStartedNewGame = false;
 
-        }
-
-        if (isBlocksBreak)
-        {
-            isBlocksBreak = false;
-            if(countLineNextLvl > haveLineNextLvl)
+            if (isNeedNewBlock || isBlockLocked)
             {
-                countLineNextLvl -= LevelConstant.TargetLineAmountInLevel(levelNum);
-                LevelUp();
+                GameStage.IsGameOver(currentBlock);
+                if (GameStage.isGameOver && isBlockLocked)
+                {
+                    Debug.Log("Game Over ! ");
+                    gameOverPanel.SetActive(true);
+
+                    audioManager.AdjustVolume("MainMusic", 0);
+                    audioManager.Play("GameOver");
+                    audioManager.AdjustVolume("GameOver", 0.6f);
+
+                    SaveObjectToSaveFileForGameOver();
+                    GameStage.isGameOver = false;
+                }
+                else
+                {
+                    currentFrame = LevelConstant.getFrameAmount(levelNum);
+                    currentBlock = blockSpawner.SpawnBlock();
+
+                }
+                isNeedNewBlock = false;
+                isBlockLocked = false;
+                GameStage.isStartedNewGame = false; 
             }
-        }
+
+            if (isBlocksBreak)
+            {
+                isBlocksBreak = false;
+                if (countLineNextLvl > haveLineNextLvl)
+                {
+                    countLineNextLvl -= LevelConstant.TargetLineAmountInLevel(levelNum);
+                    LevelUp();
+                }
+            }
+        } 
     }
     void LevelUp()
     {
@@ -124,10 +129,14 @@ public class GameHandle : MonoBehaviour
         }
     }
     void SaveObjectToSaveFileForGameOver()
-    {
-       RearrangeBestScore(totalScore);
+    {  
+        RearrangeBestScore(totalScore);
 
-        SaveManager.Save(saveObject);
+        if(saveObject != null) 
+        {
+            SaveManager.Save(saveObject);
+        } 
+
     }
 
     void RearrangeBestScore(int lastScore)
