@@ -23,84 +23,91 @@ public class BlockControl : MonoBehaviour
     GameObject tempGo;
     private void Start()
     {
-        LockDelayFrameAmount = 30f;
-        LockDelayFrameCounter = 0;
+        if (gameObject != null)
+        {
+            LockDelayFrameAmount = 30f;
+            LockDelayFrameCounter = 0;
 
-        LockDelayMaxFrameAmount = 120;
-        LockDelayMaxFrameCounter = 0;
+            LockDelayMaxFrameAmount = 120;
+            LockDelayMaxFrameCounter = 0;
 
-        currentFrame = FindObjectOfType<GameHandle>().currentFrame;
-        tempCurrentFrame = currentFrame;
+            currentFrame = FindObjectOfType<GameHandle>().currentFrame;
+            tempCurrentFrame = currentFrame;
 
-        audioManager = FindObjectOfType<AudioManager>();
+            audioManager = FindObjectOfType<AudioManager>();
 
-        InputManager.isHardDrop = false;
+            isHardDrop = false;
+            isSoftDrop = false;
+        }
     }
 
     void Update()
     {
-        BlockMovement();
-
-        if (isHardDrop)
+        if(gameObject != null)
         {
-            currentFrame = currentFrame / 20;
-        }
-        else if (isSoftDrop)
-        {
-            currentFrame = (tempCurrentFrame / 3  );
-        }
-        else currentFrame = tempCurrentFrame;
+            BlockMovement();
 
-        frameCounter += 1;
-
-        if (frameCounter >= currentFrame)
-        {
-
-            frameCounter = 0;
-            FallDown();
-        }
-
-        if (LockDelayFrameCounter >= LockDelayFrameAmount)
-        {
-            LockDelayFrameCounter = 0;
-            BlockStop();
-        }
-        else
-        {
-            LockDelayFrameCounter += 1;
-        }
-
-        if (isGrounded())
-        {
-            if (LockDelayMaxFrameCounter >= LockDelayMaxFrameAmount)
+            if (isHardDrop)
             {
-                LockDelayMaxFrameCounter = 0;
+                currentFrame = currentFrame / 20;
+            }
+            else if (isSoftDrop)
+            {
+                currentFrame = 5;
+            }
+            else currentFrame = tempCurrentFrame;
+
+            frameCounter += 1;
+
+            if (frameCounter >= currentFrame)
+            {
+
+                frameCounter = 0;
+                FallDown();
+            }
+
+            if (LockDelayFrameCounter >= LockDelayFrameAmount)
+            {
+                LockDelayFrameCounter = 0;
                 BlockStop();
             }
             else
             {
-                LockDelayMaxFrameCounter += 1;
+                LockDelayFrameCounter += 1;
+            }
+
+            if (isGrounded())
+            {
+                if (LockDelayMaxFrameCounter >= LockDelayMaxFrameAmount)
+                {
+                    LockDelayMaxFrameCounter = 0;
+                    BlockStop();
+                }
+                else
+                {
+                    LockDelayMaxFrameCounter += 1;
+                }
             }
         }
     }
 
     void BlockMovement()
     {
-       if (InputManager.isLeftSliding && !isHardDrop)
+        if (InputManager.isLeftSliding && !isHardDrop && !isSoftDrop)
         {
             InputManager.isLeftSliding = false;
             transform.position += new Vector3(-1, 0, 0);
             if (!ValidMove())
                 transform.position -= new Vector3(-1, 0, 0);
         }
-        if (InputManager.isRightSliding && !isHardDrop)
+        if (InputManager.isRightSliding && !isHardDrop && !isSoftDrop)
         {
             InputManager.isRightSliding = false;
             transform.position += new Vector3(1, 0, 0);
             if (!ValidMove())
                 transform.position -= new Vector3(1, 0, 0);
         }
-        if (InputManager.isRightRotation && !isHardDrop && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
+        if (InputManager.isRightRotation && !isHardDrop && !isSoftDrop && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
         {
             InputManager.isRightRotation = false;
 
@@ -115,7 +122,7 @@ public class BlockControl : MonoBehaviour
             }
         }
 
-        if (InputManager.isLeftRotation && !isHardDrop && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
+        if (InputManager.isLeftRotation && !isHardDrop && !isSoftDrop && (FindObjectOfType<GameHandle>().currentBlock.tag != "O Block"))
         {
             InputManager.isLeftRotation = false;
             transform.RotateAround(transform.position, Vector3.back, 90);
@@ -128,7 +135,7 @@ public class BlockControl : MonoBehaviour
                 }
             }
         }
-        if (InputManager.isHardDrop) 
+        if (InputManager.isHardDrop)
         {
             isHardDrop = true;
             LockDelayFrameCounter = LockDelayFrameAmount;
@@ -136,7 +143,7 @@ public class BlockControl : MonoBehaviour
         }
 
         isSoftDrop = InputManager.isSoftDrop ? isSoftDrop = true : isSoftDrop = false;
-       
+
 
         GosthPiece(gameObject);
     }
@@ -261,7 +268,7 @@ public class BlockControl : MonoBehaviour
     public void GosthPiece(GameObject gameObject)
     {
         int roundedX, roundedY;
-        tempGo = Instantiate(gameObject);  // i know that is not master piece
+        tempGo = Instantiate(gameObject);  // i know that is not master piece, it is not efficient
         for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 20; j++)

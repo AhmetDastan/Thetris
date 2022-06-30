@@ -39,6 +39,7 @@ public class HoldBlock : MonoBehaviour
                 replaceable = false;
 
                 SwitchBtwHoldAndHand();
+                InputManager.isLeftRotation = true;
             }
             ChangeHoldButtonImage();
         }
@@ -48,8 +49,7 @@ public class HoldBlock : MonoBehaviour
     {
         gameUiManager.gameHandle.currentBlock.SetActive(false);
         blockInHold = gameUiManager.gameHandle.currentBlock;
-        blockInHold = gameUiManager.gameHandle.currentBlock;
-        
+        blockInHold = gameUiManager.gameHandle.currentBlock; 
     }
 
     void SwitchBtwHoldAndHand()

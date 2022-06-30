@@ -2,68 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
-public  class SaveManager 
+public static class SaveManager
 {
     public static string directory = "SaveData";
     public static string fileName = "SaveFile.dat";
     public static void Save(SaveObject so)
     {
-        FileStream fileSave = new FileStream(GetFulPath(), FileMode.OpenOrCreate); 
-        BinaryFormatter bf = new BinaryFormatter();
+        if (!DirectoryExists())
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/" + directory);
+        }
 
-        Debug.Log("actim");
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream fileSave = File.Create(GetFulPath());//FileStream(GetFulPath(), FileMode.OpenOrCreate) 
+
 
         bf.Serialize(fileSave, so);
-        Debug.Log("kaydettim");
 
         fileSave.Close();
-        Debug.Log("dosya save etti");
-        
-       /* using (var file = File.Open(GetFulPath(), FileMode.Create, FileAccess.Write, FileShare.Write))
-        {
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(file, so);
-        }*/
     }
 
-    public static SaveObject Load()  
+    public static SaveObject Load()
     {
+        /* if (SaveExists())
+         {
+             BinaryFormatter bf = new BinaryFormatter();
+             FileStream file = File.Open(GetFulPath(), FileMode.Open);
+             if(file.Length > 0)
+             {
+                 SaveObject so = (SaveObject)bf.Deserialize(file);
+                 Debug.Log("save is succesful");
+                 return so;
+             }
+             Debug.Log("file is empty");
+             file.Close();
+         }*/
         if (SaveExists())
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(GetFulPath(), FileMode.Open);
-            if(file.Length > 0)
-            {
-                SaveObject so = (SaveObject)bf.Deserialize(file);
-                Debug.Log("save is succesful");
-                return so;
-            }
-            Debug.Log("file is empty");
-            file.Close();
-        }
-        
-     /*   if (SaveExists())
-        { 
             try
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(GetFulPath(), FileMode.Open);
+
                 SaveObject so = (SaveObject)bf.Deserialize(file);
-                file.Close();  
+                file.Close();
                 return so;
             }
-            catch(SerializationException)
+            catch (SerializationException)
             {
                 Debug.Log("Failed to load file ! ");
-            } 
+            }
         }
         else
         {
-            Debug.Log("There is no file doc ! "); 
-        }*/
+            Debug.Log("There is no file doc ! ");
+        }
         return null;
     }
 
@@ -82,7 +78,7 @@ public  class SaveManager
         return Application.persistentDataPath + "/" + directory + "/" + fileName;
     }
 
-    public  static void DeleteFile()
+    public static void DeleteFile()
     {
         if (SaveExists())
         {
@@ -94,4 +90,6 @@ public  class SaveManager
             Debug.Log("File could not find");
         }
     }
+
+
 }

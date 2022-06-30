@@ -21,28 +21,7 @@ public class GridManager : MonoBehaviour
     {
         mainCamTransform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
         GenerateGrid();
-    }
-
-    private void Update()
-    {
-        if (findAvailableCell)
-        {
-            for (int i = 0; i < _width; i++)
-            {
-                for (int j = 0; j < _height; j++)
-                {
-                    if (GetTileAtPosition(new Vector2(i, j))._isEmpty)
-                    {
-                        GetTileAtPosition(new Vector2(i, j)).name = "doru";
-                    }
-                    else
-                    {
-                        GetTileAtPosition(new Vector2(i, j)).name = "yanlis";
-                    }
-                }
-            }
-        }
-    }
+    } 
 
     void GenerateGrid()
     {

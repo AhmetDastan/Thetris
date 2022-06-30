@@ -15,6 +15,7 @@ public class GameStage : MonoBehaviour
 
     private void Awake()
     {
+        DefineScene(SceneManageSystem.CurrentScene());
         if (Instance == null)
         {
             Instance = this;
@@ -40,18 +41,21 @@ public class GameStage : MonoBehaviour
 
     public static void IsGameOver(GameObject currentBlock)
     {
-        int roundedX, roundedY;
-        foreach (Transform child in currentBlock.transform)
+        if (currentBlock != null)
         {
-            roundedY = Mathf.RoundToInt(child.transform.position.y);
-            roundedX = Mathf.RoundToInt(child.transform.position.x);
-
-            if (roundedY > 18 && (roundedX >= 4 && roundedX <= 6))
+            int roundedX, roundedY;
+            foreach (Transform child in currentBlock.transform)
             {
-                isGameOver = true;
-                break;
-            }else isGameOver = false;
-        }
-        
+                roundedY = Mathf.RoundToInt(child.transform.position.y);
+                roundedX = Mathf.RoundToInt(child.transform.position.x);
+
+                if (roundedY > 18 && (roundedX >= 4 && roundedX <= 6))
+                {
+                    isGameOver = true;
+                    break;
+                }
+                else isGameOver = false;
+            }
+        } 
     }
 }

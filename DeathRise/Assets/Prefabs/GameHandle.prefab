@@ -46,25 +46,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockSpawner: {fileID: 4469786299054283680}
-  holdBlock: {fileID: 4469786299054283683}
-  levelNum: 0
-  currentBlock: {fileID: 0}
-  gameOverPanel: {fileID: 1822775902502784201, guid: ff81bde99369bba459fd196899ea9704,
+  gameUiManager: {fileID: 2239909022748152452, guid: fd5ed15d3c1fbff4ebaa077f02a0d8d7,
     type: 3}
+  currentBlock: {fileID: 0}
+  levelNum: 0
+  totalLine: 0
+  haveLineNextLvl: 0
+  countLineNextLvl: 0
   saveObject:
-    highScores:
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    currentLevel: 0
-    currentScore: 0
+    highScores: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   audioManager: {fileID: 0}
 --- !u!114 &4469786299054283680
 MonoBehaviour:
@@ -99,6 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e28d7c3ac7db23439d504ddbb3a79e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameHandle: {fileID: 4469786299054283681}
+  gameUiManager: {fileID: 2239909022748152452, guid: fd5ed15d3c1fbff4ebaa077f02a0d8d7,
+    type: 3}
   isHoldAreaEmpty: 1
   replaceable: 1
+  holdBlockImage: {fileID: 0}

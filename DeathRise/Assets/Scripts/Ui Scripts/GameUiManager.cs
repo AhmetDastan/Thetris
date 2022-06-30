@@ -9,6 +9,7 @@ public class GameUiManager : MonoBehaviour
     [SerializeField] internal GameHandle gameHandle;
     [SerializeField] internal HoldBlock holdBlock;
     [SerializeField] internal UiBlockQueue uiBlockQueue;
+    GameObject gameOverPanel;
 
     [SerializeField] internal GameObject pauseButton;
 
@@ -16,12 +17,22 @@ public class GameUiManager : MonoBehaviour
     [SerializeField] internal Text level;
     [SerializeField] internal Text score;
 
-    [SerializeField] internal Sprite[] blocksSprite;
+    [SerializeField] internal Sprite[] blocksSprite; 
 
+
+    private void Awake()
+    { 
+        gameOverPanel = GameObject.Find("GameOverPanel");
+        gameOverPanel.SetActive(false);
+    }
 
     void Update()
     {
-        UpgradeGameUiData();
+        UpgradeGameUiData();  
+        if (GameStage.isGameOver)
+        { 
+            OpenGameOverPanel();
+        }
     }
     void UpgradeGameUiData()
     {
@@ -32,6 +43,15 @@ public class GameUiManager : MonoBehaviour
             score.text = "Score " + gameHandle.totalScore.ToString() + " / " + gameHandle.saveObject.highScores[0];
         }
         else score.text = "Score " + gameHandle.totalScore.ToString();
+    }
+     
+    public void OpenGameOverPanel()
+    {
+        gameOverPanel.SetActive(true);  
+    }
 
+    public void CloseGameOverPanel()
+    { 
+        gameOverPanel.SetActive(false);  
     }
 }

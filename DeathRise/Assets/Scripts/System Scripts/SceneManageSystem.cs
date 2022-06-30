@@ -23,7 +23,6 @@ public class SceneManageSystem : MonoBehaviour
     public static void LoadNewScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
-        GameStage.DefineScene(sceneName);
     }
     public static string CurrentScene()
     {

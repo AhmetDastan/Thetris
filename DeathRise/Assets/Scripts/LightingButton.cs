@@ -17,7 +17,7 @@ public class LightingButton : MonoBehaviour
     }
 
     void lightOnOf()
-    {
+    { 
         if (go.activeSelf == true)
         {
             go.SetActive(false);

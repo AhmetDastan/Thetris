@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameHandle : MonoBehaviour
-{ 
+{
     [SerializeField] internal BlockSpawner blockSpawner;
     [SerializeField] internal GameUiManager gameUiManager;
+    [SerializeField] internal GameObject currentBlock; 
 
     [SerializeField] internal int levelNum = 0;
     [SerializeField] internal int totalLine = 0;
@@ -18,50 +19,54 @@ public class GameHandle : MonoBehaviour
     internal bool isBlockLocked = false;
     internal bool isNeedNewBlock = false;
     internal bool isStartNewGame = false;
-    internal bool isBlocksBreak = false;
-
-    [SerializeField] internal GameObject currentBlock;
-    [SerializeField] internal GameObject gameOverPanel;
+    internal bool isBlocksBreak = false; 
 
     public SaveObject saveObject;
     public AudioManager audioManager;
+
+    private void Awake()
+    {
+        
+    }
+
     void Start()
     {
+
         GameStage.isGameOver = false;
         audioManager = FindObjectOfType<AudioManager>();
 
         isBlockLocked = false;
         isNeedNewBlock = false;
-        isBlocksBreak = false; 
+        isBlocksBreak = false;
         GameStage.isStartedNewGame = true;
 
-        AdjustNewGameProporties(); 
-
+        AdjustNewGameProporties();
+        //SaveObjectToSaveFileForGameOver();
         LoadObjectFromSaveFile();
 
-        FindObjectOfType<AdManager>().RequestBanner(); 
+        //FindObjectOfType<AdManager>().RequestBanner();
     }
 
     void Update()
     {
+        if(isBlockLocked)
+        {
+            GameStage.IsGameOver(currentBlock);
+        }
         if (!GameStage.isGameOver)
         {
-            Debug.Log("oyun bitmesi ve durmasi " + !GameStage.isGameOver  );
-            if (GameStage.isStartedNewGame && currentBlock == null)  
+            if (GameStage.isStartedNewGame && currentBlock == null)
             {
-                gameOverPanel.SetActive(false);
                 isStartNewGame = false;
                 currentFrame = LevelConstant.getFrameAmount(levelNum);
                 currentBlock = blockSpawner.SpawnBlock();
             }
 
             if (isNeedNewBlock || isBlockLocked)
-            {
-                GameStage.IsGameOver(currentBlock);
+            { 
                 if (GameStage.isGameOver && isBlockLocked)
                 {
                     Debug.Log("Game Over ! ");
-                    gameOverPanel.SetActive(true);
 
                     audioManager.AdjustVolume("MainMusic", 0);
                     audioManager.Play("GameOver");
@@ -73,12 +78,11 @@ public class GameHandle : MonoBehaviour
                 else
                 {
                     currentFrame = LevelConstant.getFrameAmount(levelNum);
-                    currentBlock = blockSpawner.SpawnBlock();
-
+                    currentBlock = blockSpawner.SpawnBlock(); 
                 }
                 isNeedNewBlock = false;
                 isBlockLocked = false;
-                GameStage.isStartedNewGame = false; 
+                GameStage.isStartedNewGame = false;
             }
 
             if (isBlocksBreak)
@@ -90,8 +94,10 @@ public class GameHandle : MonoBehaviour
                     LevelUp();
                 }
             }
-        } 
+        }
     }
+     
+
     void LevelUp()
     {
         levelNum++;
@@ -116,10 +122,10 @@ public class GameHandle : MonoBehaviour
     {
         totalScore += scoreAmount;
     }
-   
+
     void LoadObjectFromSaveFile()
     {
-        if(saveObject == null)
+        if (saveObject == null)
         {
             Debug.Log("save file cold not find");
         }
@@ -129,28 +135,28 @@ public class GameHandle : MonoBehaviour
         }
     }
     void SaveObjectToSaveFileForGameOver()
-    {  
+    {
         RearrangeBestScore(totalScore);
 
-        if(saveObject != null) 
+        if (saveObject != null)
         {
             SaveManager.Save(saveObject);
-        } 
-
+        }
     }
 
     void RearrangeBestScore(int lastScore)
-    { 
-        if(saveObject == null)
+    {
+        if (saveObject == null)
         {
+            Debug.Log("save pbke nill ms>");
             return;
         }
         int tempInt = 0;
         for (int i = 0; i < saveObject.highScores.Length; i++)
         {
-            if(lastScore > saveObject.highScores[i])
+            if (lastScore > saveObject.highScores[i])
             {
-                for (int j = i; j < (saveObject.highScores.Length-1); j++)
+                for (int j = i; j < (saveObject.highScores.Length - 1); j++)
                 {
                     if (saveObject.highScores[j] == 0)
                     {
@@ -164,7 +170,7 @@ public class GameHandle : MonoBehaviour
                 }
                 break;
             }
-            else if(saveObject.highScores[i] == 0)
+            else if (saveObject.highScores[i] == 0)
             {
                 saveObject.highScores[i] = lastScore;
                 break;
@@ -175,4 +181,4 @@ public class GameHandle : MonoBehaviour
             }
         }
     }
-} 
+}
