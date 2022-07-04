@@ -6,6 +6,7 @@ public class BlockControl : MonoBehaviour
 {
     [SerializeField] public GridManager gridManager;
     public AudioManager audioManager;
+    internal GameHandle gameHandle;
 
     [SerializeField] float LockDelayFrameAmount;
     [SerializeField] float LockDelayFrameCounter;
@@ -23,22 +24,21 @@ public class BlockControl : MonoBehaviour
     GameObject tempGo;
     private void Start()
     {
-        if (gameObject != null)
-        {
-            LockDelayFrameAmount = 30f;
-            LockDelayFrameCounter = 0;
+        gameHandle = GameObject.FindObjectOfType<GameHandle>();
 
-            LockDelayMaxFrameAmount = 120;
-            LockDelayMaxFrameCounter = 0;
+        LockDelayFrameAmount = 30f;
+        LockDelayFrameCounter = 0;
 
-            currentFrame = FindObjectOfType<GameHandle>().currentFrame;
-            tempCurrentFrame = currentFrame;
+        LockDelayMaxFrameAmount = 120;
+        LockDelayMaxFrameCounter = 0;
 
-            audioManager = FindObjectOfType<AudioManager>();
+        currentFrame = gameHandle.currentFrame;
+        tempCurrentFrame = currentFrame;
 
-            isHardDrop = false;
-            isSoftDrop = false;
-        }
+        audioManager = FindObjectOfType<AudioManager>();
+
+        isHardDrop = false;
+        isSoftDrop = false;
     }
 
     void Update()
@@ -214,9 +214,12 @@ public class BlockControl : MonoBehaviour
 
             this.enabled = false;
             gridManager.FillTheGridByBlock(gameObject);
-            FindObjectOfType<GameHandle>().isBlockLocked = true;
-            FindObjectOfType<GameHandle>().gameUiManager.holdBlock.replaceable = true;
+            
+            gameHandle.isBlockLocked = true;
+            gameHandle.gameUiManager.holdBlock.replaceable = true;
+
             gridManager.ClearLine();
+            GameStage.IsGameOver(gameObject);
         }
     }
 

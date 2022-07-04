@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameUiManager : MonoBehaviour
 {
 
-    [SerializeField] internal GameHandle gameHandle;
+    internal GameHandle gameHandle;
     [SerializeField] internal HoldBlock holdBlock;
     [SerializeField] internal UiBlockQueue uiBlockQueue;
     GameObject gameOverPanel;
@@ -19,13 +19,13 @@ public class GameUiManager : MonoBehaviour
 
     [SerializeField] internal Sprite[] blocksSprite; 
 
-
-    private void Awake()
-    { 
+     
+    private void Start()
+    {
         gameOverPanel = GameObject.Find("GameOverPanel");
         gameOverPanel.SetActive(false);
+        gameHandle = GameObject.FindObjectOfType<GameHandle>();
     }
-
     void Update()
     {
         UpgradeGameUiData();  

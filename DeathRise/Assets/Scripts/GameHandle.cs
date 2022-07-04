@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameHandle : MonoBehaviour
 {
     [SerializeField] internal BlockSpawner blockSpawner;
-    [SerializeField] internal GameUiManager gameUiManager;
+    internal GameUiManager gameUiManager;
     [SerializeField] internal GameObject currentBlock; 
 
     [SerializeField] internal int levelNum = 0;
@@ -23,10 +23,12 @@ public class GameHandle : MonoBehaviour
 
     public SaveObject saveObject;
     public AudioManager audioManager;
+    AdManager adManager;
 
     private void Awake()
     {
-        
+        gameUiManager = GameObject.FindObjectOfType<GameUiManager>();
+        adManager = GameObject.FindObjectOfType<AdManager>();
     }
 
     void Start()
@@ -44,7 +46,8 @@ public class GameHandle : MonoBehaviour
         //SaveObjectToSaveFileForGameOver();
         LoadObjectFromSaveFile();
 
-        //FindObjectOfType<AdManager>().RequestBanner();
+
+        adManager.RequestBanner();
     }
 
     void Update()
@@ -63,23 +66,10 @@ public class GameHandle : MonoBehaviour
             }
 
             if (isNeedNewBlock || isBlockLocked)
-            { 
-                if (GameStage.isGameOver && isBlockLocked)
-                {
-                    Debug.Log("Game Over ! ");
+            {  
+                currentFrame = LevelConstant.getFrameAmount(levelNum);
+                currentBlock = blockSpawner.SpawnBlock();
 
-                    audioManager.AdjustVolume("MainMusic", 0);
-                    audioManager.Play("GameOver");
-                    audioManager.AdjustVolume("GameOver", 0.6f);
-
-                    SaveObjectToSaveFileForGameOver();
-                    GameStage.isGameOver = false;
-                }
-                else
-                {
-                    currentFrame = LevelConstant.getFrameAmount(levelNum);
-                    currentBlock = blockSpawner.SpawnBlock(); 
-                }
                 isNeedNewBlock = false;
                 isBlockLocked = false;
                 GameStage.isStartedNewGame = false;
@@ -94,6 +84,17 @@ public class GameHandle : MonoBehaviour
                     LevelUp();
                 }
             }
+        }
+        else
+        {
+            Debug.Log("Game Over ! ");
+
+            audioManager.AdjustVolume("MainMusic", 0);
+            audioManager.Play("GameOver");
+            audioManager.AdjustVolume("GameOver", 0.6f);
+
+            SaveObjectToSaveFileForGameOver();
+            GameStage.isGameOver = false;
         }
     }
      
@@ -137,7 +138,7 @@ public class GameHandle : MonoBehaviour
     void SaveObjectToSaveFileForGameOver()
     {
         RearrangeBestScore(totalScore);
-
+        Debug.Log("yeni en iyi skor " + saveObject.highScores[0]);
         if (saveObject != null)
         {
             SaveManager.Save(saveObject);
@@ -147,8 +148,7 @@ public class GameHandle : MonoBehaviour
     void RearrangeBestScore(int lastScore)
     {
         if (saveObject == null)
-        {
-            Debug.Log("save pbke nill ms>");
+        { 
             return;
         }
         int tempInt = 0;

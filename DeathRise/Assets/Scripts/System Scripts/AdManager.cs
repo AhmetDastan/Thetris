@@ -34,7 +34,7 @@ public class AdManager : MonoBehaviour
 
 
     public void RequestBanner()
-    {
+    { 
         bannerAdId = "ca-app-pub-4198000366054577/2386472107"; // test ad => ca-app-pub-3940256099942544/6300978111   -- orj ca-app-pub-4198000366054577/2386472107
 
         this.bannerAd = new BannerView(bannerAdId, AdSize.SmartBanner, AdPosition.Bottom);

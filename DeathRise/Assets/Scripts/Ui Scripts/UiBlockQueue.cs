@@ -26,22 +26,18 @@ public class UiBlockQueue : MonoBehaviour
             {
                 //find last image
                 for (int i = 0; i < blocksQueueSprite.Length; i++)
-                {
-                    Debug.Log("ilki null degil mi " + blocksQueueSprite[i].sprite);
+                { 
                     if (blocksQueueSprite[i].sprite == null)
                     {
-                        blocksQueueSprite[i].sprite = sprite;
-                        Debug.Log("heyyo nullda " + blocksQueueSprite[i].sprite.name);
+                        blocksQueueSprite[i].sprite = sprite; 
                         break;
                     }else if( (i+1) == blocksQueueSprite.Length)
                     {
                         blocksQueueSprite[0].sprite = blocksQueueSprite[1].sprite;
                         blocksQueueSprite[1].sprite = blocksQueueSprite[2].sprite;
-                        blocksQueueSprite[2].sprite = sprite;
-                        Debug.Log("son eleman");
+                        blocksQueueSprite[2].sprite = sprite; 
                         break;
-                    }
-                    Debug.Log("yok degil");
+                    } 
                 }
                 break;
             }

@@ -54,7 +54,10 @@ public class GameStage : MonoBehaviour
                     isGameOver = true;
                     break;
                 }
-                else isGameOver = false;
+                else
+                {
+                    isGameOver = false;
+                }
             }
         } 
     }

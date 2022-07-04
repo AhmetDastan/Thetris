@@ -7,20 +7,29 @@ public class HoldBlock : MonoBehaviour
 {
     internal GameObject blockInHold;
     internal GameObject tempGo;
-    
-
-    [SerializeField] internal GameUiManager gameUiManager;
+     
+    internal GameUiManager gameUiManager;
 
     [SerializeField] internal bool isHoldAreaEmpty = true;
     [SerializeField] internal bool replaceable = true;
 
     [SerializeField] private Image holdBlockImage;
+     
 
-    // Start is called before the first frame update
     void Start()
     {
+        gameUiManager = GameObject.FindObjectOfType<GameUiManager>();
+
         isHoldAreaEmpty = true;
         replaceable = false;
+    }
+    private void Update()
+    {
+        if (InputManager.isBlockHolded)
+        {
+            InputManager.isBlockHolded = false;
+            SwichBlock();
+        }
     }
 
     public void SwichBlock()
@@ -72,12 +81,5 @@ public class HoldBlock : MonoBehaviour
             }
         }
     }
-    private void Update()
-    {
-        if (InputManager.isBlockHolded)
-        {
-            InputManager.isBlockHolded = false;
-            SwichBlock();
-        }
-    }
+   
 }
