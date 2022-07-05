@@ -7,9 +7,7 @@ public class InputManager : MonoBehaviour
 {
     private Touch touch;
     private Vector3 touchPos;
-    private Vector3 currentTouchPos;
-    private Vector3 firstTorucPos;
-    private Vector3 endTouchPos;
+    private Vector3 currentTouchPos; 
 
     internal bool isAvailableTouch = true; 
     private bool isMovedTouch = false;
@@ -19,7 +17,7 @@ public class InputManager : MonoBehaviour
     private float oneUnitScreenWidth = 0f;
     private float oneUnitScreenHeight = 0f;
 
-    private float currentTouchDeltaPositionY = 0;
+    private float currentTouchDeltaPositionY = 0f;
 
 
     public static bool isLeftSliding = false;
@@ -30,16 +28,13 @@ public class InputManager : MonoBehaviour
     public static bool isHardDrop = false;
     public static bool isBlockHolded = false;
     public static bool isRotationAvailable = false;
+    public static bool isSlidingAvailable = false;
 
     public static InputManager Instance;
 
     private void Awake()
     {
-        var verticalSize = Camera.main.orthographicSize * 2.0;
-        var horizontalSize = verticalSize * Screen.width / Screen.height;
-
-        oneUnitScreenWidth = Screen.width / (float)horizontalSize;
-        oneUnitScreenHeight = Screen.height / (float)verticalSize;
+        
          
         if (Instance == null)
         {  
@@ -52,9 +47,17 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
+        var verticalSize = Camera.main.orthographicSize * 2.0;
+        var horizontalSize = verticalSize * Screen.width / Screen.height;
+
+        oneUnitScreenWidth = Screen.width / (float)horizontalSize;
+        oneUnitScreenHeight = Screen.height / (float)verticalSize;
+    }
+     
+    void Update()
+    { 
         if (!PauseButton.isGamePaused)
         {
             if (Input.touchCount > 0)
@@ -65,28 +68,31 @@ public class InputManager : MonoBehaviour
 
                 if (touch.phase == TouchPhase.Began)
                 {
-                    isRotationAvailable = true;
-                    touchPos = touch.position;
-                    firstTorucPos = touch.position;
+                    isRotationAvailable = true; 
+                    touchPos = touch.position; 
                 }
 
                 if (touch.phase == TouchPhase.Moved)
                 {
                     isRotationAvailable = false;
-
                     isMovedTouch = true;
+                    if(!isSoftDrop)
+                        isSlidingAvailable = true;
                 }
                 else isMovedTouch = false;
 
 
                 if (touch.phase == TouchPhase.Ended)
-                {
-                    endTouchPos = touch.position;
+                { 
                     isEndedTouch = true;
                 }
                 else
                 {
-                    currentTouchDeltaPositionY = touch.deltaPosition.y;
+                    currentTouchDeltaPositionY = touch.deltaPosition.y; 
+
+                    if (currentTouchDeltaPositionY > 999999999) // if i just click, defined value will bigger value 
+                        currentTouchDeltaPositionY = 0f; 
+
                     isEndedTouch = false;
                 }
 
@@ -100,10 +106,10 @@ public class InputManager : MonoBehaviour
             }
 
             //sliding
-            if ((Mathf.Abs(currentTouchPos.x - touchPos.x) > oneUnitScreenWidth))
+            if ((Mathf.Abs(currentTouchPos.x - touchPos.x) > oneUnitScreenWidth) && isSlidingAvailable)
             {
                 isRotationAvailable = false;
-
+                isSlidingAvailable = false;
                 if (touchPos.x < currentTouchPos.x)
                 {
                     isRightSliding = true;
@@ -114,8 +120,9 @@ public class InputManager : MonoBehaviour
                 }
                 touchPos = currentTouchPos;
             }
+
             //Rotation
-            if (isRotationAvailable && !isMovedTouch && isEndedTouch) //(Mathf.Abs(firstTorucPos.x - endTouchPos.x) < clickEventAmount) 
+            if (isRotationAvailable && !isMovedTouch && isEndedTouch) 
             {
                 isRotationAvailable = false;
                 if (touchPos.x < (Screen.width / 2))
@@ -128,21 +135,20 @@ public class InputManager : MonoBehaviour
                 }
             }
 
-
-
             //soft drop 
-            if (currentTouchDeltaPositionY < -oneUnitScreenHeight || ((isMovedTouch || isStationaryTouch) && isSoftDrop))
+            if ( (currentTouchDeltaPositionY < -oneUnitScreenHeight) || ((isMovedTouch || isStationaryTouch) && isSoftDrop))
             {
-                // Debug.Log("soft drop input");
                 isSoftDrop = true;
+                isSlidingAvailable = false;
                 isRotationAvailable = false;
             }
             else isSoftDrop = false;
 
+            
             //harddrope
             if ((currentTouchDeltaPositionY < -3 * oneUnitScreenHeight))
             {
-                //  Debug.Log("hard drop input");
+                isSlidingAvailable = false;
                 isRotationAvailable = false;
                 isHardDrop = true;
             }
@@ -151,16 +157,12 @@ public class InputManager : MonoBehaviour
                 isHardDrop = false;
             }
 
+
             //hold area
-            /* if (currentTouchDeltaPositionY >5 * oneUnitScreenHeight)
-             {
-                 Debug.Log("gurdub nui");
-                 isBlockHolded = true;
-             }
-             else
-             {
-                 isBlockHolded = false;
-             }*/
+            if (currentTouchDeltaPositionY > (5 * oneUnitScreenHeight))
+            { 
+                isBlockHolded = true;
+            }else isBlockHolded = false;
 
             currentTouchDeltaPositionY = 0;
         } 

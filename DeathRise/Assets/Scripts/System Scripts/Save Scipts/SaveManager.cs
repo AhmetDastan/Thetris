@@ -17,7 +17,7 @@ public static class SaveManager
         }
 
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream fileSave = File.Create(GetFulPath());//FileStream(GetFulPath(), FileMode.OpenOrCreate) 
+        FileStream fileSave = File.Create(GetFulPath()); 
 
 
         bf.Serialize(fileSave, so);
@@ -26,20 +26,7 @@ public static class SaveManager
     }
 
     public static SaveObject Load()
-    {
-        /* if (SaveExists())
-         {
-             BinaryFormatter bf = new BinaryFormatter();
-             FileStream file = File.Open(GetFulPath(), FileMode.Open);
-             if(file.Length > 0)
-             {
-                 SaveObject so = (SaveObject)bf.Deserialize(file);
-                 Debug.Log("save is succesful");
-                 return so;
-             }
-             Debug.Log("file is empty");
-             file.Close();
-         }*/
+    { 
         if (SaveExists())
         {
             try

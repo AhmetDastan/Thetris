@@ -7,11 +7,7 @@ public class UiBlockQueue : MonoBehaviour
 {
     [SerializeField] internal Image[] blocksQueueSprite;
     [SerializeField] internal GameUiManager gameUiManager;
-
-    private void Start()
-    {
-        
-    }
+     
 
     public void AddSpriteBlockQueue(string blockTag)
     {

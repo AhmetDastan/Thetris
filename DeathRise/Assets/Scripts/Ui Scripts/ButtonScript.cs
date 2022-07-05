@@ -6,7 +6,7 @@ using System;
 
 public class ButtonScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Awake()
     {
         gameObject.GetComponent<Button>().onClick.AddListener(clickButton); 

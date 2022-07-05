@@ -24,6 +24,7 @@ public class GameHandle : MonoBehaviour
     public SaveObject saveObject;
     public AudioManager audioManager;
     AdManager adManager;
+    bool isCloseGameHandle = false; 
 
     private void Awake()
     {
@@ -41,6 +42,8 @@ public class GameHandle : MonoBehaviour
         isNeedNewBlock = false;
         isBlocksBreak = false;
         GameStage.isStartedNewGame = true;
+        
+        isCloseGameHandle = false;
 
         AdjustNewGameProporties();
         //SaveObjectToSaveFileForGameOver();
@@ -85,8 +88,9 @@ public class GameHandle : MonoBehaviour
                 }
             }
         }
-        else
+        else if(GameStage.isGameOver && !isCloseGameHandle)
         {
+            isCloseGameHandle = true;
             Debug.Log("Game Over ! ");
 
             audioManager.AdjustVolume("MainMusic", 0);
